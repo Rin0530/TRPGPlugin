@@ -1,0 +1,15 @@
+name: TRPG
+version: 1.0-SNAPSHOT
+main: Rin.TRPG.Ratami.Plugin
+api-version: 1.14
+
+commands:
+  roll:
+    description: roll 1d6
+    usage: /<command>
+    default: true
+    
+  setStatus:
+    description: ステータスをセット
+    usage: /<command>
+    default: true
