@@ -26,7 +26,12 @@ public class Status implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        sender.sendMessage("ステータスをセットしたい");
+        for(Player p :Bukkit.getOnlinePlayers()){
+            int health = (int)p.getHealth();
+            objective.getScore(p.getName()+"'s HP").setScore(health);
+            objective.getScore(p.getName()+"'s MP").setScore(p.getFoodLevel());
+            objective.getScore(p.getName()+"'s SAN").setScore(p.getLevel());
+        }
         return true;
     }
     

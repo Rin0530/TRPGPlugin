@@ -5,24 +5,27 @@ import java.util.HashMap;
 import org.bukkit.entity.Player;
 
 public class PL {
-    private int HP;
-    private int MP;
-    private int SAN;
-    private HashMap otherStatus;
+    private Player player;
+    private HashMap<String, Integer> otherStatus;
 
     public PL(Player player){
-
+        this.player = player;
+        otherStatus = new HashMap<>();
     }
 
-    public void setHP(int HP){
-        this.HP = HP;
+    public void setHP(double HP){
+        player.setHealth(HP);
     }
 
     public void setMP(int MP){
-        this.MP = MP;
+        player.setFoodLevel(MP);
     }
 
     public void setSAN(int SAN){
-        this.SAN = SAN;
+        player.setLevel(SAN);
+    }
+
+    public void setOtherStatus(String statusName, int num){
+        otherStatus.put(statusName,num);
     }
 }

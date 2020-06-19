@@ -5,11 +5,11 @@ api-version: 1.14
 
 commands:
   roll:
-    description: roll 1d6
+    description: 引数に入れた整数までの値でランダムな整数を表示
     usage: /<command>
     default: true
-    
-  setStatus:
-    description: ステータスをセット
+
+  reflectStatus:
+    description: スコアボードにステータスを反映
     usage: /<command>
-    default: true
+    default: op

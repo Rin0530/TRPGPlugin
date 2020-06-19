@@ -13,10 +13,11 @@ import org.bukkit.inventory.*;
  *
  */
 public class Plugin extends JavaPlugin implements Listener{
+    private PL pl;
 
     @Override
     public void onEnable() {
-        getCommand("setStatus").setExecutor(new Status(this));
+        getCommand("reflectStatus").setExecutor(new Status(this));
         getCommand("roll").setExecutor(new roll(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, SpigotMC!");
@@ -28,21 +29,26 @@ public class Plugin extends JavaPlugin implements Listener{
     @EventHandler
     public void onLogin(PlayerJoinEvent e){
         e.getPlayer().sendMessage("TRPG鯖へようこそ！！");
+
         setInventry(e);
     }
 
-    /**ログイン時に赤い旗をインベントリに追加 */
+    /**
+     * ログイン時に赤い旗をインベントリに追加 
+     * ステータスを保存
+     */
     public void setInventry(PlayerJoinEvent e){
         ItemStack str = new ItemStack(Material.RED_BANNER);
         e.getPlayer().getInventory().setItem(20, str);
-
+        pl = new PL(e.getPlayer());
         e.getPlayer().updateInventory();
     }
     
     @EventHandler
     public void onInteract(InventoryClickEvent e){
-        if(e.isLeftClick() && e.getSlot() == 20 && e.getCurrentItem().getType() == Material.RED_BANNER)
+        if(e.isLeftClick() && e.getSlot() == 20 && e.getCurrentItem().getType() == Material.RED_BANNER){
             e.setCancelled(true);
-        getLogger().info("アイテムクリックを検知");
+            getLogger().info("アイテムクリックを検知");
+        }
     }
 }
