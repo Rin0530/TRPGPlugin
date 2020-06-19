@@ -18,7 +18,7 @@ public class Status implements CommandExecutor{
         scoreboard = manager.getMainScoreboard();
         objective = scoreboard.getObjective("Status");
         if(objective == null){
-            objective = scoreboard.registerNewObjective("Status", "health","Player's Status");
+            objective = scoreboard.registerNewObjective("Status", "dummy","Player's Status");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         }
     }
