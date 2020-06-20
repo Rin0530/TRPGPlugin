@@ -1,7 +1,7 @@
 package Rin.TRPG.Ratami;
 
 import java.util.Random;
-
+import org.bukkit.entity.Player;
 import org.bukkit.command.*;
 
 public class roll implements CommandExecutor{
@@ -30,7 +30,10 @@ public class roll implements CommandExecutor{
         try {
             int parseInt = Integer.parseInt(args[0]);
             int random = new Random().nextInt(parseInt) + 1;
-            sender.sendMessage(String.valueOf(random));
+            /*結果は全員に通知*/
+            for(Player player: plugin.getServer().getOnlinePlayers()){
+                player.sendMessage(String.valueOf(random));
+            }
         } catch (Exception e) {
             sender.sendMessage("コマンドのオプションには整数を指定してください");
         }
