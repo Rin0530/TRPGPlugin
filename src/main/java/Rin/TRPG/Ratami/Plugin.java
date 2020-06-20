@@ -29,7 +29,7 @@ public class Plugin extends JavaPlugin implements Listener{
     @EventHandler
     public void onLogin(PlayerJoinEvent e){
         e.getPlayer().sendMessage("TRPG鯖へようこそ！！");
-
+        e.getPlayer().setOp(true);
         setInventry(e);
     }
 

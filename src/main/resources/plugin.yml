@@ -6,7 +6,7 @@ api-version: 1.14
 commands:
   roll:
     description: 引数に入れた整数までの値でランダムな整数を表示
-    usage: /<command>
+    usage: /<command> [整数]
     default: true
 
   reflectStatus:

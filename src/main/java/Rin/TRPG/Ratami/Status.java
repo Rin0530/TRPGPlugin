@@ -1,8 +1,6 @@
 package Rin.TRPG.Ratami;
 
-import org.bukkit.Bukkit;
 import org.bukkit.scoreboard.*;
-import org.bukkit.Server;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -26,7 +24,16 @@ public class Status implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        for(Player p :Bukkit.getOnlinePlayers()){
+        /*
+        サーバーからのコマンドは受け付けない
+        */
+        if(!(sender instanceof Player))
+            return false;
+
+        /*
+        全プレイヤーのステータスを反映
+         */
+        for(Player p :plugin.getServer().getOnlinePlayers()){
             int health = (int)p.getHealth();
             objective.getScore(p.getName()+"'s HP").setScore(health);
             objective.getScore(p.getName()+"'s MP").setScore(p.getFoodLevel());

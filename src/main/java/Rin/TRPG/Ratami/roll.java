@@ -32,7 +32,6 @@ public class roll implements CommandExecutor{
             int random = new Random().nextInt(parseInt) + 1;
             sender.sendMessage(String.valueOf(random));
         } catch (Exception e) {
-            //TODO: handle exception
             sender.sendMessage("コマンドのオプションには整数を指定してください");
         }
         return true;
