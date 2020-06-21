@@ -5,8 +5,8 @@ api-version: 1.14
 
 commands:
   roll:
-    description: 引数に入れた整数までの値でランダムな整数を表示
-    usage: /<command> [整数]
+    description: 引数で振るダイスを指定\n2つ目の引数にsecretを入れると自分のKPにのみ結果を通知
+    usage: 仕様例 /<command> 1d100
     default: true
 
   reflectStatus:

@@ -71,4 +71,12 @@ public class Plugin extends JavaPlugin implements Listener{
             player.openInventory(statusSet);
         }
     }
+
+    /**
+     * 引数の名前を持つオンラインプレイヤーのPLクラスのオブジェクトを返す
+     * @return
+     */
+    public HashMap<String,PL> getPl(){
+        return pl;     
+    }
 }

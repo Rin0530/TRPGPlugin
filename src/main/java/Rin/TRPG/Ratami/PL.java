@@ -1,16 +1,17 @@
 package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
-import org.bukkit.inventory.*;
 import org.bukkit.entity.Player;
 
 public class PL {
     private Player player;
     private HashMap<String, Integer> otherStatus;
+    private boolean isKP;
 
     public PL(Player player,Plugin plugin){
         this.player = player;
         otherStatus = new HashMap<>();
+        isKP = false;
     }
 
     public void setHP(double HP){
@@ -31,5 +32,9 @@ public class PL {
 
     public Player getPlayer(){
         return player;
+    }
+
+    public boolean getIsKP(){
+        return isKP;
     }
 }
