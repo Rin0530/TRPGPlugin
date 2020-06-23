@@ -5,11 +5,20 @@ api-version: 1.14
 
 commands:
   roll:
-    description: 引数で振るダイスを指定\n2つ目の引数にsecretを入れると自分のKPにのみ結果を通知
-    usage: 仕様例 /<command> 1d100
+    description: 引数で振るダイスを指定.2つ目の引数にsecretを入れると自分のKPにのみ結果を通知
+    usage: 仕様例 /<command> 1D100
     default: true
 
   reflectStatus:
     description: スコアボードにステータスを反映
     usage: /<command>
     default: op
+
+  book:
+    description: ステータス設定用本配布コマンド.直接実行することはない
+    usage: なんで動かないんだよ！！
+    default: true
+    
+  statusSet:
+    description: ステータス設定用コマンド.直接実行することはない
+    default: true
