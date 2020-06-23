@@ -1,6 +1,5 @@
 package Rin.TRPG.Ratami;
 
-import java.util.HashMap;
 import java.util.Random;
 import org.bukkit.entity.Player;
 import org.bukkit.command.*;
@@ -29,35 +28,37 @@ public class roll implements CommandExecutor{
 
         /*引数に整数以外が与えられた場合の例外処理*/
         try {
-            String[] diceRoll = args[0].split("d");
+            String[] diceRoll = args[0].split("D");
             int parseInt = Integer.parseInt(diceRoll[1]);
             int random = -1;
             for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
                 random = new Random().nextInt(parseInt) + 1;
-            }
-            
-            /*オプションがなければ結果は全員に通知*/
-            if(args.length == 1){
-                for(Player player: plugin.getServer().getOnlinePlayers()){
-                    player.sendMessage(String.valueOf(random));
-                    return true;
-                }
-            }
 
-            /*オプションでsecretが指定されれば自分とKPにのみ通知 */
-            if(args[1].equals("secret")){
-                sender.sendMessage(String.valueOf(random));
-                for(String name :plugin.getPl().keySet()){
-                    if(plugin.getPl().get(name).getIsKP())
-                    plugin.getPl().get(name).getPlayer().sendMessage(String.valueOf(random));
+                /*オプションがなければ結果は全員に通知*/
+                if(args.length == 1){
+                    for(Player player: plugin.getServer().getOnlinePlayers()){
+                        player.sendMessage(String.valueOf(random));
+                        
+                    }
+                    continue;
                 }
                 
-            }else {
-                sender.sendMessage("シークレットダイスはsecretをつけてください");
+                /*オプションでsecretが指定されれば自分とKPにのみ通知 */
+                if(args[1].equals("secret")){
+                    sender.sendMessage(String.valueOf(random));
+                    for(String name :plugin.getPl().keySet()){
+                        if(plugin.getPl().get(name).getIsKP())
+                            plugin.getPl().get(name).getPlayer().sendMessage(String.valueOf(random));
+                        }
+                }else {
+                    sender.sendMessage("シークレットダイスはsecretをつけてください");
+                }
             }
+            
+            
 
         } catch (Exception e) {
-            sender.sendMessage("コマンドのオプションには1d100のように指定してください");
+            sender.sendMessage("コマンドのオプションには1D100のように指定してください");
         }
         return true;
         
