@@ -22,3 +22,8 @@ commands:
   statusSet:
     description: ステータス設定用コマンド.直接実行することはない
     default: true
+
+  KP:
+    description: コマンド実行者をKPに設定
+    usage: /<command>
+    default: true

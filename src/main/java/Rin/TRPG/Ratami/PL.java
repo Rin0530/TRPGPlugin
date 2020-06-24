@@ -73,8 +73,8 @@ public class PL {
      * @param statusName
      * @param num
      */
-    public void setOtherStatus(String statusName, int num){
-        otherStatus.put(statusName,num);
+    public void addOtherStatus(String statusName, int num){
+        otherStatus.put(statusName,otherStatus.get(statusName)+num);
     }
 
     /**

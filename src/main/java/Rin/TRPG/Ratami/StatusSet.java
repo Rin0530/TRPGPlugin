@@ -17,7 +17,7 @@ public class StatusSet implements CommandExecutor{
         if(args[0].equals("main")){
             senderPL.setMainStatus(args[1], Integer.parseInt(args[2])); 
         }else if(args[0].equals("other")){
-            senderPL.setOtherStatus(args[1], Integer.parseInt(args[2]));
+            senderPL.addOtherStatus(args[1], Integer.parseInt(args[2]));
         }
         sender.sendMessage(args[1]+"を"+args[2]+"に設定しました");
         return true;

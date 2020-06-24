@@ -25,6 +25,7 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("roll").setExecutor(new roll(this));
         getCommand("book").setExecutor(new StatusBook(this));
         getCommand("statusSet").setExecutor(new StatusSet(this));
+        getCommand("KP").setExecutor(new KP(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, SpigotMC!");
         pl = new HashMap<>();
