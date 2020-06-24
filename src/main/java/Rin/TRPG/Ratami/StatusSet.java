@@ -20,6 +20,7 @@ public class StatusSet implements CommandExecutor{
             senderPL.addOtherStatus(args[1], Integer.parseInt(args[2]));
         }
         sender.sendMessage(args[1]+"を"+args[2]+"に設定しました");
+        plugin.getServer().dispatchCommand(sender, "clear @p minecraft:written_book{display:{Name:'{\"text\":\"数値設定本\"}'}} 1");
         return true;
     }
 }
