@@ -20,12 +20,6 @@ public class roll implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        /*コマンドの引数が櫃１つじゃないとき
-        正しい使い方を表示する*/
-        if(args.length > 2){
-            sender.sendMessage("コマンドのオプションが間違っています");
-        return true;
-        }
 
         /*引数に整数以外が与えられた場合の例外処理*/
         try {
@@ -36,30 +30,34 @@ public class roll implements CommandExecutor{
 
             for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
                 random = new Random().nextInt(parseInt) + 1;
+                
                 String result = String.valueOf(random);
+                
 
-                //コマンドの第2引数に技能のどれか含まれていれば
-                if(senderStatus.containsKey(args[1])){
-                    result = args[1]+"("+senderStatus.get(args[1])+")";
-                    if(senderStatus.get(args[1]) >= random){
-                        result += ") >= "+ result;
-                        if(random >= 95){
-                            result += " 致命的";
+                if(args.length == 3){
+                
+                    //コマンドの第3引数に技能のどれか含まれていれば
+                    if(senderStatus.containsKey(args[2])){
+                        result = args[2]+"("+senderStatus.get(args[2])+")";
+                        if(senderStatus.get(args[2]) < random){
+                            result += ") < "+ String.valueOf(random);
+                            if(random >= 95){
+                                result += " 致命的";
+                            }
+                            result += "失敗";
                         }
-                        result += "失敗";
-                    }else if(senderStatus.get(args[1]) <= random){
-                        result += ") <= "+ result;
-                        if(random <= 5){
-                            result += " 決定的";
+                        else{
+                            result += ") >= "+ String.valueOf(random);
+                            if(random <= 5){
+                                result += " 決定的";
+                            }
+                            result += "成功";
                         }
-                        result += "成功";
                     }
-                        
-                            
                 }
 
                 /*オプションがなければ結果は全員に通知*/
-                if(args.length == 1){
+                if(args.length == 1 || !args[1].equals("secret")){
                     for(Player player: plugin.getServer().getOnlinePlayers()){
                         player.sendMessage(result);
                         
@@ -67,10 +65,9 @@ public class roll implements CommandExecutor{
                     continue;
                 }
                 
-                
 
                 /*オプションでsecretが指定されれば自分とKPにのみ通知 */
-                if(args[1].equals("secret")){
+                if(args.length != 1 && args[1].equals("secret")){
                     sender.sendMessage(String.valueOf(random));
                     for(String name :plugin.getPl().keySet()){
                         if(plugin.getPl().get(name).getIsKP())

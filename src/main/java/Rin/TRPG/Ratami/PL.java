@@ -118,7 +118,7 @@ public class PL{
      * 能力値が格納されたハッシュマップを返す
      * @return
      */
-    public HashMap getMainStatus(){
+    public HashMap<String,Integer> getMainStatus(){
         return mainStatus;
     }
 
@@ -126,7 +126,7 @@ public class PL{
      * 技能値が格納されたハッシュマップを返す
      * @return
      */
-    public HashMap getOtherStatus(){
+    public HashMap<String,Integer> getOtherStatus(){
         return otherStatus;
     }
 
