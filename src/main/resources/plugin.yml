@@ -27,3 +27,8 @@ commands:
     description: コマンド実行者をKPに設定
     usage: /<command>
     default: true
+
+  PL:
+    description: 実行者をPLに設定&ステータス設定本を配布
+    usage: /<command>
+    default: true

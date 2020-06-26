@@ -1,7 +1,6 @@
 package Rin.TRPG.Ratami;
 
 import org.bukkit.command.*;
-import org.bukkit.entity.Player;
 
 public class StatusBook implements CommandExecutor{
     private Plugin plugin;
