@@ -2,12 +2,15 @@ package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
 
-import org.bukkit.Material;
-import org.bukkit.entity.Player;
+
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.*;
+import org.bukkit.event.entity.EntityDamageEvent;
+import org.bukkit.event.entity.EntityDeathEvent;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
+import org.bukkit.entity.HumanEntity;
+import org.bukkit.GameMode;
 import org.bukkit.plugin.java.JavaPlugin ;
 
 
@@ -21,14 +24,18 @@ public class Plugin extends JavaPlugin implements Listener{
 
     @Override
     public void onEnable() {
-        getCommand("reflectStatus").setExecutor(new Status(this));
+
+        /* コマンド有効化*/  
         getCommand("roll").setExecutor(new roll(this));
         getCommand("book").setExecutor(new StatusBook(this));
         getCommand("statusSet").setExecutor(new StatusSet(this));
         getCommand("KP").setExecutor(new KP(this));
         getCommand("PL").setExecutor(new GiveBook(this));
+        getCommand("add").setExecutor(new add(this));
+        getCommand("removeBook").setExecutor(new SetFinished(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, SpigotMC!");
+
         pl = new HashMap<>();
     }
     
@@ -43,21 +50,18 @@ public class Plugin extends JavaPlugin implements Listener{
         e.getPlayer().setOp(true);
         /*プレイヤーのオブジェクトを生成 */
         pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
+
+        getCommand("reflectStatus").setExecutor(new Status(this));
         
     }
     
     /**
-     * アイテムクリックを検知
+     * ダメージキャンセル
      */
     @EventHandler
-    public void onInteract(InventoryClickEvent e){
-        /*クリックしたアイテムを検知 */
-        if(e.isLeftClick() && e.getSlot() == 20 && e.getCurrentItem().getType() == Material.RED_BANNER){
+    public void onInteract(EntityDamageEvent e){
+        if(e.getCause() == DamageCause.FALL){
             e.setCancelled(true);
-            getLogger().info("アイテムクリックを検知");
-            /*クリックしたプレイヤーを検知 */
-            Player player = (Player)e.getInventory().getHolder();
-            player.openInventory(pl.get(player.getName()).getInventory());
         }
     }
 

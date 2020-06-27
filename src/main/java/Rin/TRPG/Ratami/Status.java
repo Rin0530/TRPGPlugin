@@ -9,6 +9,7 @@ public class Status implements CommandExecutor{
     private ScoreboardManager manager;
     private Scoreboard scoreboard;
     private Objective objective;
+    private Team team;
 
     public Status(Plugin plugin){
         this.plugin = plugin;
@@ -19,25 +20,31 @@ public class Status implements CommandExecutor{
             objective = scoreboard.registerNewObjective("Status", "dummy","Player's Status");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
         }
+        team = scoreboard.getTeam("PL");
     }
 
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
+
+        for(Player player :plugin.getServer().getOnlinePlayers()){
+            player.setScoreboard(scoreboard);
+        }
         /*
         サーバーからのコマンドは受け付けない
         */
         if(!(sender instanceof Player))
             return false;
-
         /*
-        全プレイヤーのステータスを反映
+        PLプレイヤーのステータスを反映
          */
-        for(Player p :plugin.getServer().getOnlinePlayers()){
-            int health = (int)p.getHealth();
-            objective.getScore(p.getName()+"'s HP").setScore(health);
-            objective.getScore(p.getName()+"'s MP").setScore(p.getFoodLevel());
-            objective.getScore(p.getName()+"'s SAN").setScore(p.getLevel());
+        for(String names :team.getEntries()){
+            PL p = plugin.getPl().get(names);
+            int health = (int)p.getHP();
+            sender.sendMessage(String.valueOf(health));
+            objective.getScore(p.getPlayer().getName()+"'s HP").setScore(health);
+            objective.getScore(p.getPlayer().getName()+"'s MP").setScore(p.getPlayer().getFoodLevel());
+            objective.getScore(p.getPlayer().getName()+"'s SAN").setScore(p.getPlayer().getLevel());
         }
         return true;
     }

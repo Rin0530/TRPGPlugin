@@ -3,14 +3,23 @@ package Rin.TRPG.Ratami;
 import java.util.HashMap;
 import java.util.Random;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
 import org.bukkit.command.*;
 
 public class roll implements CommandExecutor{
 
     private final Plugin plugin;
+    private ScoreboardManager scoreboardManager;
+    private Scoreboard scoreboard;
+    private Team team;
     
     public roll(Plugin plugin){
         this.plugin = plugin;
+        scoreboardManager = plugin.getServer().getScoreboardManager();
+        scoreboard = scoreboardManager.getNewScoreboard();
+        team = scoreboard.getTeam("PL");
     }
 
     /**
@@ -37,17 +46,17 @@ public class roll implements CommandExecutor{
                 if(args.length == 3){
                 
                     //コマンドの第3引数に技能のどれか含まれていれば
-                    if(senderStatus.containsKey(args[2])){
+                    if(senderStatus.containsKey(args[2]) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2])) {
                         result = args[2]+"("+senderStatus.get(args[2])+")";
                         if(senderStatus.get(args[2]) < random){
-                            result += ") < "+ String.valueOf(random);
+                            result += " < "+ String.valueOf(random);
                             if(random >= 95){
                                 result += " 致命的";
                             }
                             result += "失敗";
                         }
                         else{
-                            result += ") >= "+ String.valueOf(random);
+                            result += " >= "+ String.valueOf(random);
                             if(random <= 5){
                                 result += " 決定的";
                             }
@@ -69,12 +78,11 @@ public class roll implements CommandExecutor{
                 /*オプションでsecretが指定されれば自分とKPにのみ通知 */
                 if(args.length != 1 && args[1].equals("secret")){
                     sender.sendMessage(String.valueOf(random));
-                    for(String name :plugin.getPl().keySet()){
-                        if(plugin.getPl().get(name).getIsKP())
-                            plugin.getPl().get(name).getPlayer().sendMessage(result);
-                        }
-                }else {
-                    sender.sendMessage("シークレットダイスはsecretをつけてください");
+                    for(String names :team.getEntries()){
+                        PL p = plugin.getPl().get(names);
+                        p.getPlayer().sendMessage(String.valueOf(random));
+                    }
+                    
                 }
             }
             

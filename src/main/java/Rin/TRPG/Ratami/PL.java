@@ -2,23 +2,30 @@ package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.scoreboard.*;
+import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
 
 public class PL{
+    private String giveBook;
+    private int HP;
     private Plugin plugin;
     private Player player;
-    private HashMap<String, Integer> mainStatus;
-    private HashMap<String, Integer> otherStatus;
-    private boolean isKP;
-    private Inventory statusInventory;
+    private HashMap<String,Integer> mainStatus;
+    private HashMap<String,Integer> subStatus;
+    private HashMap<String,Integer> otherStatus;
     private ScoreboardManager manager;
-    private Scoreboard scoreboard;
-    private Team team;
+    private Scoreboard scoreboard1;
+    private Team team1;
     
     private String[] mains = {
         "STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU"
+        };
+
+    private String[] sub = {
+        "LUCK", "IDEA", "knowledge"
         };
     private String[] other = {
             "回避", "キック", "組み付き", "こぶし（パンチ）", "頭突き", "投擲", "マーシャルアーツ", "拳銃", "サブマシンガン", "ショットガン", "マシンガン", "ライフル",
@@ -40,24 +47,24 @@ public class PL{
     public PL(Player player,Plugin plugin){
         this.plugin = plugin;
         this.player = player;
+        giveBook = "give @e[team= PL,type= minecraft:player] minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
+        HP = 20;
         mainStatus = new HashMap<>();
-        
         otherStatus = new HashMap<>();
-        isKP = false;
+        subStatus = new HashMap<>();
 
         //スコアボード設定
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"team add PL");
         manager = plugin.getServer().getScoreboardManager();
-        scoreboard = manager.getNewScoreboard();
-        team = scoreboard.getTeam("PL");
-        if(team == null){
-            team = scoreboard.registerNewTeam("PL");
-            team.setDisplayName("PL");
+        scoreboard1 = manager.getNewScoreboard();
+        team1 = scoreboard1.getTeam("PL");
+        if(team1 == null){
+            team1 = scoreboard1.registerNewTeam("PL");
+            team1.setDisplayName("PL");
+            team1.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
         }
-        player.setScoreboard(scoreboard);
-
-
-        statusInventory = plugin.getServer().createInventory(null, 54, "ステータス設定画面");
-
+        
+        player.setScoreboard(scoreboard1);
         
         for(int i = 0;i < other.length;i++){
             otherStatus.put(other[i], otherNum[i]);
@@ -66,14 +73,15 @@ public class PL{
 
 
     /**
-     * HPのゲッター
+     * HPのセッター
      * @param HP
      */
     public void setHP(double HP){
+        //HP1につき最大ハート1つになる
         player.setHealth(HP);
     }
     /**
-     * MPのゲッター
+     * MPのセッター
      * @param MP
      */
     public void setMP(int MP){
@@ -81,11 +89,35 @@ public class PL{
     }
 
     /**
-     * SAN値のゲッター
+     * SAN値のセッター
      * @param SAN
      */
     public void setSAN(int SAN){
         player.setLevel(SAN);
+    }
+
+    /**
+     * HPのゲッター
+     * @return
+     */
+    public int getHP(){
+        return HP;
+    }
+
+    /**
+     * MPのセッター
+     * @return
+     */
+    public int getMP(){
+        return player.getFoodLevel();
+    }
+
+    /**
+     * SAN値のゲッター
+     * @return
+     */
+    public int getSAN(){
+        return player.getLevel();
     }
 
     /**
@@ -95,6 +127,24 @@ public class PL{
      */
     public void setMainStatus(String statusName, int num){
         mainStatus.put(statusName, num);
+        if(statusName.equals("HP"))
+            setHP(num);
+        else if(statusName.equals("POW")){
+            setSAN(num * 5);
+            setMP(num);
+            subStatus.put("LUCK", num * 5);
+        }
+        else if(statusName.equals("INT")){
+            subStatus.put("IDEA", num * 5);
+        }
+        else if(statusName.equals("EDU")){
+            subStatus.put("knowledge", num * 5);
+        }
+        else if(statusName.equals("CON") || statusName.equals("SIZ")){
+            if(mainStatus.containsKey("CON") && mainStatus.containsKey("SIZ")){
+                player.setHealthScale((mainStatus.get("CON")+mainStatus.get("SIZ")) / 2);
+            }
+        }
     }
 
     /**
@@ -123,11 +173,28 @@ public class PL{
     }
 
     /**
+     * 依存能力値が格納されたハッシュマップを返す
+     * @return
+     */
+    public HashMap<String,Integer> getsubStatus(){
+        return subStatus;
+    }
+
+
+    /**
      * 技能値が格納されたハッシュマップを返す
      * @return
      */
     public HashMap<String,Integer> getOtherStatus(){
         return otherStatus;
+    }
+
+    /**
+     * PL用本の配布用コマンド
+     * @return
+     */
+    public String getGiveBook(){
+        return giveBook;
     }
 
     /**
@@ -146,20 +213,27 @@ public class PL{
         return player;
     }
 
-    /**
-     * KPかどうかのゲッター(削除予定)
-     * @return
-     */
-    public boolean getIsKP(){
-        return isKP;
+    public void giveBook(CommandSender sender){
+        //能力値書き込み
+        for(String str : getMain())
+            giveBook += ",{\"text\":\""+str+": "+String.valueOf(getMainStatus().get(str))+"\n\"}";
+        giveBook += "]','[";
+        for(String str : getsubStatus().keySet()){
+            giveBook += "{\"text\":\""+str+": "+String.valueOf(getsubStatus().get(str))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 all "+str+"\"}}";
+            if(!str.equals("knowledge")){
+                giveBook += ",";
+            }
+        }
+        giveBook += "]','[";
+        //技能値書き込み
+        for(String str : getOther()){
+            giveBook += "{\"text\":\""+str+": "+String.valueOf(getOtherStatus().get(str))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 all "+str+"\"}}";
+            if(str.equals("ライフル") || str.equals("目星") || str.equals("変装") || str.equals("母国語") || str.equals("電子工作")){
+                giveBook += "]','[";
+                continue;
+            }
+            giveBook += ",";
+        }
+        giveBook += "{\"text\":\"\n\"}']} 1";
     }
-
-    /**
-     * インベントリのゲッター(削除するかも)
-     * @return
-     */
-    public Inventory getInventory(){
-        return statusInventory;
-    }
-
 }

@@ -6,11 +6,11 @@ api-version: 1.14
 commands:
   roll:
     description: 引数で振るダイスを指定.2つ目の引数にsecretを入れると自分のKPにのみ結果を通知
-    usage: 仕様例 /<command> 1D100
+    usage: /<command> 1D100 secret(NotNullable) (技能名) 
     default: true
 
   reflectStatus:
-    description: スコアボードにステータスを反映
+    description: PLのステータスをスコアボードに反映
     usage: /<command>
     default: op
 
@@ -30,5 +30,20 @@ commands:
 
   PL:
     description: 実行者をPLに設定&ステータス設定本を配布
+    usage: /<command>
+    default: true
+
+  add:
+    description: オプションのプレイヤーのHP,MP,SANを増やす
+    usage: /<command> 対象プレイヤー 対象ステータス 増加値
+    default: op
+
+  subtract:
+    description: オプションのプレイヤーのHP,MP,SANを減らす
+    usage: /<command> 対象プレイヤー 対象ステータス 減少値
+    default: op
+  
+  removeBook:
+    description: ステータス振り完了
     usage: /<command>
     default: true
