@@ -7,6 +7,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.GameRule;
 import org.bukkit.plugin.java.JavaPlugin ;
@@ -33,6 +34,7 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("removeBook").setExecutor(new SetFinished(this));
         getCommand("EnablePVP").setExecutor(new EnablePVP(this));
         getCommand("hp").setExecutor(new HP(this));
+        getCommand("reflectStatus").setExecutor(new Status(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, SpigotMC!");
 
@@ -54,6 +56,7 @@ public class Plugin extends JavaPlugin implements Listener{
     @Override
     public void onDisable() {
         getLogger().info("See you again, SpigotMC!");
+        getServer().dispatchCommand(getServer().getConsoleSender(), "scoreboard objectives remove Status");
     }
 
     @EventHandler
@@ -62,7 +65,7 @@ public class Plugin extends JavaPlugin implements Listener{
         /*プレイヤーのオブジェクトを生成 */
         pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
 
-        getCommand("reflectStatus").setExecutor(new Status(this));
+        
         
     }
 
@@ -71,6 +74,11 @@ public class Plugin extends JavaPlugin implements Listener{
         e.setDeathMessage(e.getEntity().getName() + " キャラロスト");
         HumanEntity entity = e.getEntity();
         entity.setGameMode(GameMode.SPECTATOR);
+    }
+
+    @EventHandler
+    public void onInteract(FoodLevelChangeEvent e){
+        e.setCancelled(true);
     }
     
 

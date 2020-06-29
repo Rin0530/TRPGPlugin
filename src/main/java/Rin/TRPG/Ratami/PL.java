@@ -62,6 +62,7 @@ public class PL{
             team1 = scoreboard1.registerNewTeam("PL");
             team1.setDisplayName("PL");
             team1.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            team1 = scoreboard1.getTeam("PL");
         }
         
         player.setScoreboard(scoreboard1);
@@ -147,14 +148,7 @@ public class PL{
         else if(statusName.equals("CON") || statusName.equals("SIZ")){
             if(mainStatus.containsKey("CON") && mainStatus.containsKey("SIZ")){
                 double HP = (double)(mainStatus.get("CON")+mainStatus.get("SIZ")) /2.0;
-                try{
-                    player.setHealth(20);
-                    Thread.sleep(1000);
-                    player.setHealthScale(HP);
-                    //Thread.sleep(500);
-                    //player.setHealth(HP);
-                }catch(InterruptedException e){}
-                
+                player.setHealth(HP);
             }
         }
     }
@@ -226,12 +220,14 @@ public class PL{
     }
 
     public void giveBook(CommandSender sender){
+        if(giveBook.length() > 200)
+            return;
         //能力値書き込み
         for(String str : getMain())
             giveBook += ",{\"text\":\""+str+": "+String.valueOf(getMainStatus().get(str))+"\n\"}";
         giveBook += "]','[";
         for(String str : getsubStatus().keySet()){
-            giveBook += "{\"text\":\""+str+": "+String.valueOf(getsubStatus().get(str))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 all "+str+"\"}}";
+            giveBook += "{\"text\":\""+str+": "+String.valueOf(getsubStatus().get(str))+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 all "+str+"\"}}";
             if(!str.equals("knowledge")){
                 giveBook += ",";
             }

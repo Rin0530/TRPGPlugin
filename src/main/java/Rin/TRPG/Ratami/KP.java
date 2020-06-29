@@ -23,6 +23,7 @@ public class KP implements CommandExecutor{
             team = board.registerNewTeam("KP");
             team.setDisplayName("KP");
             team.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            team = board.getTeam("KP");
         }
     }
 
@@ -37,8 +38,6 @@ public class KP implements CommandExecutor{
         PL pl = plugin.getPl().get(sender.getName());
         plugin.getServer().dispatchCommand(sender,pl.getGiveBook());
         plugin.getServer().dispatchCommand(sender, "team join KP "+target);
-
-        
 
         return true;
     }

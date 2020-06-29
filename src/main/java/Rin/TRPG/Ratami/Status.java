@@ -19,6 +19,7 @@ public class Status implements CommandExecutor{
         if(objective == null){
             objective = scoreboard.registerNewObjective("Status", "dummy","Player's Status");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+            objective =scoreboard.getObjective("Status");
         }
         team = scoreboard.getTeam("PL");
     }
@@ -26,10 +27,6 @@ public class Status implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-
-        for(Player player :plugin.getServer().getOnlinePlayers()){
-            player.setScoreboard(scoreboard);
-        }
         /*
         サーバーからのコマンドは受け付けない
         */
@@ -40,8 +37,9 @@ public class Status implements CommandExecutor{
          */
         for(String names :team.getEntries()){
             PL p = plugin.getPl().get(names);
+            p.getPlayer().setScoreboard(scoreboard);
             int health = (int)p.getHP();
-            objective.getScore(p.getPlayer().getName()+"'s HP").setScore((int)(health * p.getPlayer().getHealthScale() / p.getPlayer().getMaxHealth()));
+            objective.getScore(p.getPlayer().getName()+"'s HP").setScore((int)(health));
             objective.getScore(p.getPlayer().getName()+"'s MP").setScore(p.getPlayer().getFoodLevel());
             objective.getScore(p.getPlayer().getName()+"'s SAN").setScore(p.getPlayer().getLevel());
         }

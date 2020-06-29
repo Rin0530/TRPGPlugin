@@ -12,6 +12,8 @@ public class add implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
+        if(args.length != 3)
+            return false;
         int change = Integer.parseInt(args[2]);
         PL pl = plugin.getPl().get(args[0]);
         //コマンド名がaddなら値を増加
@@ -19,15 +21,13 @@ public class add implements CommandExecutor{
                 switch(args[1]){
                     case "HP":
                         double hp = pl.getPlayer().getHealth();
-                        if(change >= 0)
-                            change += hp;
-                        else
-                            change -= hp;
-                        double afterSclale = pl.getPlayer().getHealthScale() / 20;
-                        if(change > afterSclale * pl.getPlayer().getMaxHealth())
-                            pl.setHP(afterSclale * 20);
-                        else 
-                        pl.setHP(afterSclale * change);
+                        change += hp;
+                        if(change <= 0){
+                            pl.setHP(0);
+                            break;
+                        }
+                        sender.sendMessage(String.valueOf(hp));
+                        pl.setHP(change);
                         break;
                     case "MP":
                         change += pl.getMP();
@@ -35,11 +35,13 @@ public class add implements CommandExecutor{
                         break;
                     case "SAN":
                     case "SAN値":
-                        if(change > pl.getSAN()){
-                        pl.setSAN(0);
-
-                        }
                         change += pl.getSAN();
+                        if(change <= 0){
+                            pl.setSAN(0);
+                            pl.setHP(0);
+                            sender.sendMessage(String.valueOf(pl.getSAN() - change));
+                            break;
+                        }
                         pl.setSAN(change);
                         break;
                     default:
