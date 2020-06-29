@@ -2,15 +2,13 @@ package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
 
-
+import org.bukkit.GameMode;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.EntityDeathEvent;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import org.bukkit.entity.HumanEntity;
-import org.bukkit.GameMode;
+import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.GameRule;
 import org.bukkit.plugin.java.JavaPlugin ;
 
 
@@ -31,11 +29,25 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("statusSet").setExecutor(new StatusSet(this));
         getCommand("KP").setExecutor(new KP(this));
         getCommand("PL").setExecutor(new GiveBook(this));
-        getCommand("add").setExecutor(new add(this));
+        getCommand("change").setExecutor(new add(this));
         getCommand("removeBook").setExecutor(new SetFinished(this));
+        getCommand("EnablePVP").setExecutor(new EnablePVP(this));
+        getCommand("hp").setExecutor(new HP(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, SpigotMC!");
 
+        //ゲームルール設定
+        getServer().getWorld("world").setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        getServer().getWorld("world").setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, false);
+        getServer().getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        getServer().getWorld("world").setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        getServer().getWorld("world").setGameRule(GameRule.DO_MOB_SPAWNING, false);
+        getServer().getWorld("world").setGameRule(GameRule.NATURAL_REGENERATION, false);
+        getServer().getWorld("world").setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false);
+        getServer().getWorld("world").setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+        getServer().getWorld("world").setGameRule(GameRule.FALL_DAMAGE, false);
+        getServer().getWorld("world").setGameRule(GameRule.FIRE_DAMAGE, false);
+        getServer().getWorld("world").setPVP(false);
         pl = new HashMap<>();
     }
     
@@ -47,23 +59,20 @@ public class Plugin extends JavaPlugin implements Listener{
     @EventHandler
     public void onLogin(PlayerJoinEvent e){
         e.getPlayer().sendMessage("TRPG鯖へようこそ！！");
-        e.getPlayer().setOp(true);
         /*プレイヤーのオブジェクトを生成 */
         pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
 
         getCommand("reflectStatus").setExecutor(new Status(this));
         
     }
-    
-    /**
-     * ダメージキャンセル
-     */
+
     @EventHandler
-    public void onInteract(EntityDamageEvent e){
-        if(e.getCause() == DamageCause.FALL){
-            e.setCancelled(true);
-        }
+    public void onInteract(PlayerDeathEvent e){
+        e.setDeathMessage(e.getEntity().getName() + " キャラロスト");
+        HumanEntity entity = e.getEntity();
+        entity.setGameMode(GameMode.SPECTATOR);
     }
+    
 
     /**
      * 引数の名前を持つオンラインプレイヤーのPLクラスのオブジェクトを返す

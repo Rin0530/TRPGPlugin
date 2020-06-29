@@ -41,8 +41,7 @@ public class Status implements CommandExecutor{
         for(String names :team.getEntries()){
             PL p = plugin.getPl().get(names);
             int health = (int)p.getHP();
-            sender.sendMessage(String.valueOf(health));
-            objective.getScore(p.getPlayer().getName()+"'s HP").setScore(health);
+            objective.getScore(p.getPlayer().getName()+"'s HP").setScore((int)(health * p.getPlayer().getHealthScale() / p.getPlayer().getMaxHealth()));
             objective.getScore(p.getPlayer().getName()+"'s MP").setScore(p.getPlayer().getFoodLevel());
             objective.getScore(p.getPlayer().getName()+"'s SAN").setScore(p.getPlayer().getLevel());
         }

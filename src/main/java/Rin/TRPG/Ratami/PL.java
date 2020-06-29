@@ -100,8 +100,8 @@ public class PL{
      * HPのゲッター
      * @return
      */
-    public int getHP(){
-        return HP;
+    public double getHP(){
+        return player.getHealth();
     }
 
     /**
@@ -118,6 +118,10 @@ public class PL{
      */
     public int getSAN(){
         return player.getLevel();
+    }
+
+    public double getMaxHealth(){
+        return player.getHealthScale() * player.getMaxHealth();
     }
 
     /**
@@ -142,7 +146,15 @@ public class PL{
         }
         else if(statusName.equals("CON") || statusName.equals("SIZ")){
             if(mainStatus.containsKey("CON") && mainStatus.containsKey("SIZ")){
-                player.setHealthScale((mainStatus.get("CON")+mainStatus.get("SIZ")) / 2);
+                double HP = (double)(mainStatus.get("CON")+mainStatus.get("SIZ")) /2.0;
+                try{
+                    player.setHealth(20);
+                    Thread.sleep(1000);
+                    player.setHealthScale(HP);
+                    //Thread.sleep(500);
+                    //player.setHealth(HP);
+                }catch(InterruptedException e){}
+                
             }
         }
     }
@@ -228,12 +240,12 @@ public class PL{
         //技能値書き込み
         for(String str : getOther()){
             giveBook += "{\"text\":\""+str+": "+String.valueOf(getOtherStatus().get(str))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 all "+str+"\"}}";
-            if(str.equals("ライフル") || str.equals("目星") || str.equals("変装") || str.equals("母国語") || str.equals("電子工作")){
+            if(str.equals("ライフル") || str.equals("目星") || str.equals("変装") || str.equals("母国語") || str.equals("コンピューター")){
                 giveBook += "]','[";
                 continue;
-            }
-            giveBook += ",";
+            }else if(!(str.equals("歴史")))
+                giveBook += ",";
         }
-        giveBook += "{\"text\":\"\n\"}']} 1";
+        giveBook += "]']}";
     }
 }

@@ -12,23 +12,35 @@ public class add implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        int now = Integer.parseInt(args[2]);
+        int change = Integer.parseInt(args[2]);
+        PL pl = plugin.getPl().get(args[0]);
         //コマンド名がaddなら値を増加
             try {
                 switch(args[1]){
                     case "HP":
-                        now += plugin.getPl().get(args[0]).getHP();
-                        sender.sendMessage(String.valueOf(now));
-                        plugin.getPl().get(args[0]).setHP(now);
+                        double hp = pl.getPlayer().getHealth();
+                        if(change >= 0)
+                            change += hp;
+                        else
+                            change -= hp;
+                        double afterSclale = pl.getPlayer().getHealthScale() / 20;
+                        if(change > afterSclale * pl.getPlayer().getMaxHealth())
+                            pl.setHP(afterSclale * 20);
+                        else 
+                        pl.setHP(afterSclale * change);
                         break;
                     case "MP":
-                        now += plugin.getPl().get(args[0]).getMP();
-                        plugin.getPl().get(args[0]).setMP(now);
+                        change += pl.getMP();
+                        pl.setMP(change);
                         break;
                     case "SAN":
                     case "SAN値":
-                        now += plugin.getPl().get(args[0]).getSAN();
-                        plugin.getPl().get(args[0]).setSAN(now);
+                        if(change > pl.getSAN()){
+                        pl.setSAN(0);
+
+                        }
+                        change += pl.getSAN();
+                        pl.setSAN(change);
                         break;
                     default:
                         return false;

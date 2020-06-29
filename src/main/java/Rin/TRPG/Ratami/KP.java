@@ -34,10 +34,11 @@ public class KP implements CommandExecutor{
         String target = sender.getName();
         if(args.length == 1)
             target = args[0];
-        plugin.getServer().dispatchCommand(sender, "team join KP "+target);
-
         PL pl = plugin.getPl().get(sender.getName());
         plugin.getServer().dispatchCommand(sender,pl.getGiveBook());
+        plugin.getServer().dispatchCommand(sender, "team join KP "+target);
+
+        
 
         return true;
     }

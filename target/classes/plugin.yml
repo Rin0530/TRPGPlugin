@@ -33,17 +33,21 @@ commands:
     usage: /<command>
     default: true
 
-  add:
+  change:
     description: オプションのプレイヤーのHP,MP,SANを増やす
-    usage: /<command> 対象プレイヤー 対象ステータス 増加値
+    usage: /<command> 対象プレイヤー 対象ステータス 変更値
     default: op
 
-  subtract:
-    description: オプションのプレイヤーのHP,MP,SANを減らす
-    usage: /<command> 対象プレイヤー 対象ステータス 減少値
-    default: op
-  
   removeBook:
     description: ステータス振り完了
     usage: /<command>
     default: true
+
+  EnablePVP: 
+    description: PvPの可否を設定
+    usage: /<command> enable|disable
+    default: op
+
+  hp:
+    description: デバッグ用コマンド
+    dafault: true
