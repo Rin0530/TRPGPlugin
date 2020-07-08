@@ -41,6 +41,7 @@ public class roll implements CommandExecutor{
                 random = new Random().nextInt(parseInt) + 1;
                 
                 String result = String.valueOf(random);
+                String senderName = plugin.getPl().get(sender.getName()).getName();
                 
 
                 if(args.length == 3){
@@ -49,7 +50,7 @@ public class roll implements CommandExecutor{
                     if(senderStatus.containsKey(args[2]) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2])) {
                         if(plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2]))
                             senderStatus = plugin.getPl().get(sender.getName()).getsubStatus();
-                        result = args[2]+"("+senderStatus.get(args[2])+")";
+                        result = senderName + args[2]+"("+senderStatus.get(args[2])+")";
                         if(senderStatus.get(args[2]) < random){
                             result += " < "+ String.valueOf(random);
                             if(random >= 95){
@@ -91,7 +92,7 @@ public class roll implements CommandExecutor{
             
 
         } catch (Exception e) {
-            sender.sendMessage("コマンドのオプションには1D100のように指定してください");
+            return false;
         }
         return true;
         

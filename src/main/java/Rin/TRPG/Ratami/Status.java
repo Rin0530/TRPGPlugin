@@ -39,9 +39,9 @@ public class Status implements CommandExecutor{
             PL p = plugin.getPl().get(names);
             p.getPlayer().setScoreboard(scoreboard);
             int health = (int)p.getHP();
-            objective.getScore(p.getPlayer().getName()+"'s HP").setScore((int)(health));
-            objective.getScore(p.getPlayer().getName()+"'s MP").setScore(p.getPlayer().getFoodLevel());
-            objective.getScore(p.getPlayer().getName()+"'s SAN").setScore(p.getPlayer().getLevel());
+            objective.getScore(p.getName()+"'s HP").setScore((int)(health));
+            objective.getScore(p.getName()+"'s MP").setScore(p.getPlayer().getFoodLevel());
+            objective.getScore(p.getName()+"'s SAN").setScore(p.getPlayer().getLevel());
         }
         return true;
     }

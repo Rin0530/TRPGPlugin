@@ -31,6 +31,7 @@ public class add implements CommandExecutor{
                         break;
                     case "MP":
                         change += pl.getMP();
+                        plugin.setIsMagic(true);
                         pl.setMP(change);
                         break;
                     case "SAN":
@@ -38,8 +39,6 @@ public class add implements CommandExecutor{
                         change += pl.getSAN();
                         if(change <= 0){
                             pl.setSAN(0);
-                            pl.setHP(0);
-                            sender.sendMessage(String.valueOf(pl.getSAN() - change));
                             break;
                         }
                         pl.setSAN(change);
@@ -48,7 +47,6 @@ public class add implements CommandExecutor{
                         return false;
                 }
             }catch(Exception e) {
-                sender.sendMessage(e.toString());
                 return false;
             }
         plugin.getServer().dispatchCommand(sender, "reflectStatus");

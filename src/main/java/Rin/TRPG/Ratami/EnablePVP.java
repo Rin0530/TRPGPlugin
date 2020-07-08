@@ -12,12 +12,16 @@ public class EnablePVP implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        if(args[0].equals("true"))
+        if(args[0].equals("true") || args[0].equals("enable") ){
             plugin.getServer().getWorld("world").setPVP(true);
-        else if(args[0].equals("disable"))
+            plugin.setCanDamaged(true);
+        }
+            else if(args[0].equals("disable") || args[0].equals("false")){
             plugin.getServer().getWorld("world").setPVP(false);
-        else
-            sender.sendMessage("オプションにはenableもしくはdisableを入れてください");
+            plugin.setCanDamaged(false);
+            }
+            else
+            sender.sendMessage("オプションにはenable(true)もしくはdisable(false)を入れてください");
         return true;
     }
 }

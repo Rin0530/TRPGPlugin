@@ -43,6 +43,10 @@ commands:
     usage: /<command>
     default: true
 
+  displayname:
+    description: 表示名変更
+    usage: /<command> プレイヤー名 表示名
+
   EnablePVP: 
     description: PvPの可否を設定
     usage: /<command> enable|disable

@@ -12,6 +12,7 @@ public class KP implements CommandExecutor{
     Scoreboard board;
     ScoreboardManager manager;
     Team team;
+    Team pl;
 
     public KP(Plugin plugin){
         this.plugin = plugin;
@@ -19,6 +20,7 @@ public class KP implements CommandExecutor{
         manager = plugin.getServer().getScoreboardManager();
         board = manager.getNewScoreboard();
         team = board.getTeam("KP");
+        pl = board.getTeam("PL");
         if(team == null){
             team = board.registerNewTeam("KP");
             team.setDisplayName("KP");
@@ -35,8 +37,12 @@ public class KP implements CommandExecutor{
         String target = sender.getName();
         if(args.length == 1)
             target = args[0];
-        PL pl = plugin.getPl().get(sender.getName());
-        plugin.getServer().dispatchCommand(sender,pl.getGiveBook());
+        for(String names :pl.getEntries()){
+            PL player = plugin.getPl().get(names);
+            plugin.getServer().dispatchCommand(sender,"give " + names + player.getGiveBook());
+        }
+        
+        
         plugin.getServer().dispatchCommand(sender, "team join KP "+target);
 
         return true;

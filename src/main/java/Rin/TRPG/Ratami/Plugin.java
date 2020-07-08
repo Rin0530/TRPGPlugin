@@ -7,6 +7,7 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.GameRule;
@@ -19,6 +20,8 @@ import org.bukkit.plugin.java.JavaPlugin ;
  */
 public class Plugin extends JavaPlugin implements Listener{
     private HashMap<String,PL> pl;
+    private boolean isMagic;
+    private boolean canDamaged;
     
 
     @Override
@@ -35,6 +38,7 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("EnablePVP").setExecutor(new EnablePVP(this));
         getCommand("hp").setExecutor(new HP(this));
         getCommand("reflectStatus").setExecutor(new Status(this));
+        getCommand("displayname").setExecutor(new Name(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, SpigotMC!");
 
@@ -49,7 +53,12 @@ public class Plugin extends JavaPlugin implements Listener{
         getServer().getWorld("world").setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         getServer().getWorld("world").setGameRule(GameRule.FALL_DAMAGE, false);
         getServer().getWorld("world").setGameRule(GameRule.FIRE_DAMAGE, false);
-        getServer().getWorld("world").setPVP(false);
+        
+
+        isMagic = false;
+        canDamaged = false;
+        getServer().getWorld("world").setPVP(canDamaged);
+
         pl = new HashMap<>();
     }
     
@@ -63,22 +72,28 @@ public class Plugin extends JavaPlugin implements Listener{
     public void onLogin(PlayerJoinEvent e){
         e.getPlayer().sendMessage("TRPG鯖へようこそ！！");
         /*プレイヤーのオブジェクトを生成 */
-        pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
-
-        
-        
+        pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));  
     }
 
     @EventHandler
     public void onInteract(PlayerDeathEvent e){
-        e.setDeathMessage(e.getEntity().getName() + " キャラロスト");
+        String name = e.getEntity().getName();
+        e.setDeathMessage(pl.get(name).getName() + " キャラロスト");
         HumanEntity entity = e.getEntity();
         entity.setGameMode(GameMode.SPECTATOR);
     }
 
     @EventHandler
     public void onInteract(FoodLevelChangeEvent e){
-        e.setCancelled(true);
+         if(!isMagic){
+            isMagic = false;
+        }else
+            e.setCancelled(true);
+    }
+
+    @EventHandler
+    public void onInteract(EntityDamageEvent e){
+        e.setCancelled(canDamaged);
     }
     
 
@@ -88,5 +103,13 @@ public class Plugin extends JavaPlugin implements Listener{
      */
     public HashMap<String,PL> getPl(){
         return pl;     
+    }
+
+    public void setIsMagic(boolean isMagic){
+        this.isMagic = isMagic;
+    }
+
+    public void setCanDamaged(boolean canDamaged){
+        this.canDamaged = canDamaged;
     }
 }

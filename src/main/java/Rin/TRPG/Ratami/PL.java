@@ -9,6 +9,7 @@ import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
 public class PL{
+    private String name;
     private String giveBook;
     private int HP;
     private Plugin plugin;
@@ -47,7 +48,7 @@ public class PL{
     public PL(Player player,Plugin plugin){
         this.plugin = plugin;
         this.player = player;
-        giveBook = "give @e[team= PL,type= minecraft:player] minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
+        giveBook = "minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
         HP = 20;
         mainStatus = new HashMap<>();
         otherStatus = new HashMap<>();
@@ -119,6 +120,19 @@ public class PL{
      */
     public int getSAN(){
         return player.getLevel();
+    }
+
+    /**
+     * 名前のゲッター
+     * @return
+     */
+    public String getName(){
+        return name;
+    }
+
+    public void setName(String name){
+        getPlayer().setDisplayName(name);
+        this.name = name;
     }
 
     public double getMaxHealth(){
