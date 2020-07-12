@@ -16,7 +16,6 @@ public class add implements CommandExecutor{
             return false;
         int change = Integer.parseInt(args[2]);
         PL pl = plugin.getPl().get(args[0]);
-        //コマンド名がaddなら値を増加
             try {
                 switch(args[1]){
                     case "HP":
@@ -36,6 +35,7 @@ public class add implements CommandExecutor{
                         break;
                     case "SAN":
                     case "SAN値":
+                        plugin.setIsMagic(false);
                         change += pl.getSAN();
                         if(change <= 0){
                             pl.setSAN(0);

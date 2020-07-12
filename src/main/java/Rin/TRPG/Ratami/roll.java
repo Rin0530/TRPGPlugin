@@ -47,10 +47,16 @@ public class roll implements CommandExecutor{
                 if(args.length == 3){
                 
                     //コマンドの第3引数に技能のどれか含まれていれば
-                    if(senderStatus.containsKey(args[2]) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2])) {
-                        if(plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2]))
+                    if(senderStatus.containsKey(args[2]) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2]) || args[2].indexOf("SAN") >= 0) {
+                        
+                        if(plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2])){
                             senderStatus = plugin.getPl().get(sender.getName()).getsubStatus();
-                        result = senderName + args[2]+"("+senderStatus.get(args[2])+")";
+                        }
+                        if(args[2].indexOf("SAN") > 0){
+                            senderStatus.put(args[2], plugin.getPl().get(sender.getName()).getSAN());
+                            sender.sendMessage("arg0");
+                        }
+                        result = senderName +" "+ args[2]+"("+senderStatus.get(args[2])+")";
                         if(senderStatus.get(args[2]) < random){
                             result += " < "+ String.valueOf(random);
                             if(random >= 95){

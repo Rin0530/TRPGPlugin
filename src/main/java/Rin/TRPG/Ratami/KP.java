@@ -1,5 +1,6 @@
 package Rin.TRPG.Ratami;
 
+import org.bukkit.GameMode;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
@@ -12,38 +13,39 @@ public class KP implements CommandExecutor{
     Scoreboard board;
     ScoreboardManager manager;
     Team team;
-    Team pl;
+    
 
     public KP(Plugin plugin){
         this.plugin = plugin;
         plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"team add KP");
         manager = plugin.getServer().getScoreboardManager();
-        board = manager.getNewScoreboard();
-        team = board.getTeam("KP");
-        pl = board.getTeam("PL");
+        board = manager.getMainScoreboard();
+        team  = board.getTeam("PL");
         if(team == null){
-            team = board.registerNewTeam("KP");
-            team.setDisplayName("KP");
-            team.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
-            team = board.getTeam("KP");
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "say PLチームの取得に失敗");
         }
     }
 
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        ((Player)sender).setScoreboard(board);
-
+        if(team==null){
+            sender.sendMessage("PLがnullです");
+            team  = board.getTeam("PL");
+        }
         String target = sender.getName();
         if(args.length == 1)
             target = args[0];
-        for(String names :pl.getEntries()){
+        for(String names :team.getEntries()){
             PL player = plugin.getPl().get(names);
-            plugin.getServer().dispatchCommand(sender,"give " + names + player.getGiveBook());
+            player.getPlayer().setGameMode(GameMode.ADVENTURE);
+            plugin.getServer().dispatchCommand(sender,"give " + names +player.getGiveBook());
+            player.getPlayer().setOp(false);
         }
         
         
         plugin.getServer().dispatchCommand(sender, "team join KP "+target);
+        
 
         return true;
     }

@@ -48,7 +48,7 @@ public class PL{
     public PL(Player player,Plugin plugin){
         this.plugin = plugin;
         this.player = player;
-        giveBook = "minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
+        giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
         HP = 20;
         mainStatus = new HashMap<>();
         otherStatus = new HashMap<>();
@@ -234,7 +234,7 @@ public class PL{
     }
 
     public void giveBook(CommandSender sender){
-        if(giveBook.length() > 200)
+        if(giveBook.length() > 250)
             return;
         //能力値書き込み
         for(String str : getMain())

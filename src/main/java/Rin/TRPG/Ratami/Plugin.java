@@ -3,14 +3,16 @@ package Rin.TRPG.Ratami;
 import java.util.HashMap;
 
 import org.bukkit.GameMode;
+import org.bukkit.GameRule;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
-import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.Listener;
+import org.bukkit.event.Event.Result;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.GameRule;
+import org.bukkit.event.player.PlayerBedEnterEvent;
+import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin ;
 
 
@@ -72,28 +74,31 @@ public class Plugin extends JavaPlugin implements Listener{
     public void onLogin(PlayerJoinEvent e){
         e.getPlayer().sendMessage("TRPG鯖へようこそ！！");
         /*プレイヤーのオブジェクトを生成 */
-        pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));  
+        pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
+        e.getPlayer().setOp(true);  
     }
 
     @EventHandler
     public void onInteract(PlayerDeathEvent e){
         String name = e.getEntity().getName();
-        e.setDeathMessage(pl.get(name).getName() + " キャラロスト");
+        //e.setDeathMessage(pl.get(name).getName() + " キャラロスト");
         HumanEntity entity = e.getEntity();
         entity.setGameMode(GameMode.SPECTATOR);
     }
 
     @EventHandler
     public void onInteract(FoodLevelChangeEvent e){
-         if(!isMagic){
+         if(isMagic){
             isMagic = false;
         }else
             e.setCancelled(true);
+            getServer().dispatchCommand(getServer().getConsoleSender(), "reflectstatus");
     }
 
     @EventHandler
     public void onInteract(EntityDamageEvent e){
         e.setCancelled(canDamaged);
+        getServer().dispatchCommand(getServer().getConsoleSender(), "reflectstatus");
     }
     
 
@@ -111,5 +116,11 @@ public class Plugin extends JavaPlugin implements Listener{
 
     public void setCanDamaged(boolean canDamaged){
         this.canDamaged = canDamaged;
+    }
+
+    //うそつきだれだ専用
+    @EventHandler
+    public void onInteract(PlayerBedEnterEvent e){
+        e.setUseBed(Result.ALLOW);
     }
 }
