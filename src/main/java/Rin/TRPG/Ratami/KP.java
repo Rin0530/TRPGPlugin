@@ -2,11 +2,9 @@ package Rin.TRPG.Ratami;
 
 import org.bukkit.GameMode;
 import org.bukkit.command.*;
-import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import org.bukkit.scoreboard.Team;
-import org.bukkit.scoreboard.Team.*;
 
 public class KP implements CommandExecutor{
     private Plugin plugin;
@@ -38,16 +36,10 @@ public class KP implements CommandExecutor{
             target = args[0];
         for(String names :team.getEntries()){
             PL player = plugin.getPl().get(names);
-            player.getPlayer().setGameMode(GameMode.ADVENTURE);
+            player.getPlayer().setOp(true);
             plugin.getServer().dispatchCommand(sender,"give " + names +player.getGiveBook());
-            player.getPlayer().setOp(false);
-        }
-        
-        
+            }
         plugin.getServer().dispatchCommand(sender, "team join KP "+target);
-        
-
         return true;
     }
-        
 }

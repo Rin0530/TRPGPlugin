@@ -80,8 +80,6 @@ public class Plugin extends JavaPlugin implements Listener{
 
     @EventHandler
     public void onInteract(PlayerDeathEvent e){
-        String name = e.getEntity().getName();
-        //e.setDeathMessage(pl.get(name).getName() + " キャラロスト");
         HumanEntity entity = e.getEntity();
         entity.setGameMode(GameMode.SPECTATOR);
     }

@@ -12,7 +12,7 @@ public class SetFinished implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        plugin.getServer().dispatchCommand(sender, "clear @p minecraft:written_book{display:{Name:'{\"text\":\"ステータス設定\",\"color\":\"red\",\"bold\":true,\"italic\":true}'}} 1");
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "clear "+sender.getName()+" minecraft:written_book{display:{Name:'{\"text\":\"ステータス設定\",\"color\":\"red\",\"bold\":true,\"italic\":true}'}} 1");
         PL pl = plugin.getPl().get(sender.getName());
         pl.giveBook(sender);
         return true;

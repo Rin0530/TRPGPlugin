@@ -17,6 +17,7 @@ public class PL{
     private HashMap<String,Integer> mainStatus;
     private HashMap<String,Integer> subStatus;
     private HashMap<String,Integer> otherStatus;
+    private HashMap<String,Integer> otherDef;
     private ScoreboardManager manager;
     private Scoreboard scoreboard1;
     private Team team1;
@@ -53,6 +54,7 @@ public class PL{
         mainStatus = new HashMap<>();
         otherStatus = new HashMap<>();
         subStatus = new HashMap<>();
+        otherDef = new HashMap<>();
 
         //スコアボード設定
         plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"team add PL");
@@ -70,6 +72,7 @@ public class PL{
         
         for(int i = 0;i < other.length;i++){
             otherStatus.put(other[i], otherNum[i]);
+            otherDef.put(other[i], otherNum[i]);
         }
     }
 
@@ -173,7 +176,12 @@ public class PL{
      * @param num
      */
     public void addOtherStatus(String statusName, int num){
-        otherStatus.put(statusName,otherStatus.get(statusName)+num);
+        if(num == 0){
+            otherStatus.put(statusName,otherDef.get(statusName));
+            getPlayer().sendMessage("リセット");
+        }else{
+            otherStatus.put(statusName,otherDef.get(statusName)+num);
+        }
     }
 
     /**
