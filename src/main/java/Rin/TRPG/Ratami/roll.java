@@ -19,7 +19,7 @@ public class roll implements CommandExecutor{
         this.plugin = plugin;
         scoreboardManager = plugin.getServer().getScoreboardManager();
         scoreboard = scoreboardManager.getNewScoreboard();
-        team = scoreboard.getTeam("PL");
+        team = scoreboard.getTeam("KP");
     }
 
     /**
@@ -35,6 +35,7 @@ public class roll implements CommandExecutor{
             String[] diceRoll = args[0].split("D");
             int parseInt = Integer.parseInt(diceRoll[1]);
             int random = -1;
+            //技能値を取得
             HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
 
             for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
@@ -43,18 +44,14 @@ public class roll implements CommandExecutor{
                 String result = String.valueOf(random);
                 String senderName = plugin.getPl().get(sender.getName()).getName();
                 
-
                 if(args.length == 3){
                 
                     //コマンドの第3引数に技能のどれか含まれていれば
                     if(senderStatus.containsKey(args[2]) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2]) || args[2].indexOf("SAN") >= 0) {
                         
+                        //依存能力値を取得
                         if(plugin.getPl().get(sender.getName()).getsubStatus().containsKey(args[2])){
                             senderStatus = plugin.getPl().get(sender.getName()).getsubStatus();
-                        }
-                        if(args[2].indexOf("SAN") > 0){
-                            senderStatus.put(args[2], plugin.getPl().get(sender.getName()).getSAN());
-                            sender.sendMessage("arg0");
                         }
                         result = senderName +" "+ args[2]+"("+senderStatus.get(args[2])+")";
                         if(senderStatus.get(args[2]) < random){
@@ -86,18 +83,21 @@ public class roll implements CommandExecutor{
 
                 /*オプションでsecretが指定されれば自分とKPにのみ通知 */
                 if(args.length != 1 && args[1].equals("secret")){
-                    sender.sendMessage(String.valueOf(random));
-                    for(String names :team.getEntries()){
-                        PL p = plugin.getPl().get(names);
-                        p.getPlayer().sendMessage(String.valueOf(random));
+                    sender.sendMessage(result);
+                    for(String name : plugin.getPl().keySet()){
+                        PL p = plugin.getPl().get(name);
+                        if(p.getIsKP()){
+                            p.getPlayer().sendMessage(result);
+                        }
                     }
-                    
+                    continue;
                 }
             }
             
             
 
         } catch (Exception e) {
+            sender.sendMessage(e.toString());
             return false;
         }
         return true;

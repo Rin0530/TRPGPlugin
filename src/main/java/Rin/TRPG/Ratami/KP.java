@@ -38,6 +38,7 @@ public class KP implements CommandExecutor{
             PL player = plugin.getPl().get(names);
             player.getPlayer().setOp(true);
             plugin.getServer().dispatchCommand(sender,"give " + names +player.getGiveBook());
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "kill @e[type=item]");
             }
         plugin.getServer().dispatchCommand(sender, "team join KP "+target);
         return true;

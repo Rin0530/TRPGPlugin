@@ -18,7 +18,7 @@ public class HP implements CommandExecutor{
         //    player.setHealthScale(Double.parseDouble(args[1]));
         //else 
             player.setHealth(Double.parseDouble(args[1]));
-        plugin.getServer().dispatchCommand(sender, "reflectStatus");
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "reflectStatus");
         return true;
     }
 }

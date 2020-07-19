@@ -21,6 +21,7 @@ public class PL{
     private ScoreboardManager manager;
     private Scoreboard scoreboard1;
     private Team team1;
+    private boolean isKP;
     
     private String[] mains = {
         "STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU"
@@ -51,6 +52,7 @@ public class PL{
         this.player = player;
         giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
         HP = 20;
+        isKP = false;
         mainStatus = new HashMap<>();
         otherStatus = new HashMap<>();
         subStatus = new HashMap<>();
@@ -98,6 +100,7 @@ public class PL{
      * @param SAN
      */
     public void setSAN(int SAN){
+        subStatus.put("SAN",SAN);
         player.setLevel(SAN);
     }
 
@@ -123,6 +126,18 @@ public class PL{
      */
     public int getSAN(){
         return player.getLevel();
+    }
+
+    /**
+     * KPかどうかのゲッター
+     * @param isKP
+     */
+    public void setIsKP(boolean isKP){
+        this.isKP = isKP;
+    }
+
+    public boolean getIsKP(){
+        return isKP;
     }
 
     /**

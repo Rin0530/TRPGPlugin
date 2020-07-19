@@ -10,6 +10,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.Event.Result;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
+import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
@@ -98,7 +99,11 @@ public class Plugin extends JavaPlugin implements Listener{
         e.setCancelled(canDamaged);
         getServer().dispatchCommand(getServer().getConsoleSender(), "reflectstatus");
     }
-    
+
+    @EventHandler
+    public void onInteract(ItemDespawnEvent e){
+        e.setCancelled(true);
+    }
 
     /**
      * 引数の名前を持つオンラインプレイヤーのPLクラスのオブジェクトを返す
@@ -116,9 +121,4 @@ public class Plugin extends JavaPlugin implements Listener{
         this.canDamaged = canDamaged;
     }
 
-    //うそつきだれだ専用
-    @EventHandler
-    public void onInteract(PlayerBedEnterEvent e){
-        e.setUseBed(Result.ALLOW);
-    }
 }
