@@ -264,7 +264,7 @@ public class PL{
             giveBook += ",{\"text\":\""+str+": "+String.valueOf(getMainStatus().get(str))+"\n\"}";
         giveBook += "]','[";
         for(String str : getsubStatus().keySet()){
-            giveBook += "{\"text\":\""+str+": "+String.valueOf(getsubStatus().get(str))+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 all "+str+"\"}}";
+            giveBook += "{\"text\":\""+str+": "+String.valueOf(getsubStatus().get(str))+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+str+"\"}}";
             if(!str.equals("knowledge")){
                 giveBook += ",";
             }
@@ -272,7 +272,7 @@ public class PL{
         giveBook += "]','[";
         //技能値書き込み
         for(String str : getOther()){
-            giveBook += "{\"text\":\""+str+": "+String.valueOf(getOtherStatus().get(str))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 all "+str+"\"}}";
+            giveBook += "{\"text\":\""+str+": "+String.valueOf(getOtherStatus().get(str))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+str+"\"}}";
             if(str.equals("ライフル") || str.equals("目星") || str.equals("変装") || str.equals("母国語") || str.equals("コンピューター")){
                 giveBook += "]','[";
                 continue;

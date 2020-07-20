@@ -1,6 +1,7 @@
 package Rin.TRPG.Ratami;
 
 import org.bukkit.command.*;
+import org.bukkit.entity.Player;
 
 public class SetFinished implements CommandExecutor{
     private Plugin plugin;
@@ -12,7 +13,12 @@ public class SetFinished implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "clear "+sender.getName()+" minecraft:written_book{display:{Name:'{\"text\":\"ステータス設定\",\"color\":\"red\",\"bold\":true,\"italic\":true}'}} 1");
+        if(!(sender instanceof Player)){
+            sender.sendMessage("サーバーからの実行は禁止です");
+            return true;
+        }
+        PL senderPL = plugin.getPl().get(sender.getName());
+        senderPL.getPlayer().getInventory().remove(senderPL.getPlayer().getInventory().getItemInMainHand());
         PL pl = plugin.getPl().get(sender.getName());
         pl.giveBook(sender);
         return true;

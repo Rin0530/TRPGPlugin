@@ -6,7 +6,7 @@ api-version: 1.14
 commands:
   roll:
     description: 引数で振るダイスを指定.2つ目の引数にsecretを入れると自分のKPにのみ結果を通知
-    usage: /<command> 1D100 secret(NotNullable) (技能名) 
+    usage: /<command> 1D100 (secret) 技能名
     default: true
 
   reflectStatus:
@@ -16,19 +16,18 @@ commands:
 
   book:
     description: ステータス設定用本配布コマンド.直接実行することはない
-    usage: なんで動かないんだよ！！
     default: true
     
   statusSet:
     description: ステータス設定用コマンド.直接実行することはない
     default: true
 
-  KP:
+  kp:
     description: コマンド実行者をKPに設定
     usage: /<command>
     default: true
 
-  PL:
+  pl:
     description: 実行者をPLに設定&ステータス設定本を配布
     usage: /<command>
     default: true
@@ -46,6 +45,7 @@ commands:
   displayname:
     description: 表示名変更
     usage: /<command> プレイヤー名 表示名
+    default: true
 
   EnablePVP: 
     description: PvPの可否を設定

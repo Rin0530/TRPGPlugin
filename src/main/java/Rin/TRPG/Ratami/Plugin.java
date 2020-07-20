@@ -7,12 +7,10 @@ import org.bukkit.GameRule;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.Event.Result;
 import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
-import org.bukkit.event.player.PlayerBedEnterEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin ;
 
@@ -36,7 +34,7 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("statusSet").setExecutor(new StatusSet(this));
         getCommand("KP").setExecutor(new KP(this));
         getCommand("PL").setExecutor(new GiveBook(this));
-        getCommand("change").setExecutor(new add(this));
+        getCommand("change").setExecutor(new change(this));
         getCommand("removeBook").setExecutor(new SetFinished(this));
         getCommand("EnablePVP").setExecutor(new EnablePVP(this));
         getCommand("hp").setExecutor(new HP(this));
@@ -76,7 +74,7 @@ public class Plugin extends JavaPlugin implements Listener{
         e.getPlayer().sendMessage("TRPG鯖へようこそ！！");
         /*プレイヤーのオブジェクトを生成 */
         pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
-        e.getPlayer().setOp(true);  
+        e.getPlayer().setOp(true);
     }
 
     @EventHandler

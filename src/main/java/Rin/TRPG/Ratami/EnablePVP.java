@@ -15,6 +15,7 @@ public class EnablePVP implements CommandExecutor{
         if(args[0].equals("true") || args[0].equals("enable") ){
             plugin.getServer().getWorld("world").setPVP(true);
             plugin.setCanDamaged(true);
+            plugin.getServer().getWorld("world").setPVP(true);
         }
             else if(args[0].equals("disable") || args[0].equals("false")){
             plugin.getServer().getWorld("world").setPVP(false);
