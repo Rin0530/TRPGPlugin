@@ -41,8 +41,10 @@ public class roll implements CommandExecutor{
                     if(!args[1].equals("secret"))
                         skill = args[1];
                     else
-                        skill = args[2];
-                
+                        if(!(args.length == 2))
+                            skill = args[2];
+                    
+                    
                     //コマンドの第3引数に技能のどれか含まれていれば
                     if(senderStatus.containsKey(skill) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(skill) || skill.indexOf("SAN") >= 0) {
                         
@@ -66,37 +68,26 @@ public class roll implements CommandExecutor{
                             result += "成功";
                         }
                     }
-                }
-
-                /*オプションがなければ結果は全員に通知*/
-                if(args.length == 1 || !args[1].equals("secret")){
-                    for(Player player: plugin.getServer().getOnlinePlayers()){
-                        player.sendMessage(result);
-                    }
-                    continue;
-                }
-                
-
-                /*オプションでsecretが指定されれば自分とKPにのみ通知 */
-                if(args.length != 1 && args[1].equals("secret")){
-                    sender.sendMessage(result);
-                    for(String name : plugin.getPl().keySet()){
-                        PL p = plugin.getPl().get(name);
-                        if(p.getIsKP() && !sender.getName().equals(p.getPlayer().getName())){
-                            p.getPlayer().sendMessage(result);
+                    /*オプションでsecretが指定されれば自分とKPにのみ通知 */
+                    if(args[1].equals("secret")){
+                        sender.sendMessage(result);
+                        for(String name : plugin.getPl().keySet()){
+                            PL p = plugin.getPl().get(name);
+                            if(p.getIsKP() && !sender.getName().equals(p.getPlayer().getName())){
+                                p.getPlayer().sendMessage(result);
+                            }
                         }
+                        continue;
                     }
-                    continue;
                 }
+                sender.sendMessage(result);
             }
-            
-            
-
         } catch (Exception e) {
-            sender.sendMessage("コマンドのオプションが間違っています");
+            sender.sendMessage(e.toString()+"\nコマンドのオプションが間違っています");
             return false;
         }
         return true;
         
     }
+
 }

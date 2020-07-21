@@ -25,8 +25,7 @@ public class change implements CommandExecutor{
                             pl.setHP(0);
                             break;
                         }
-                        sender.sendMessage(String.valueOf(hp));
-                        pl.setHP(change);
+                        pl.setHP((double)change);
                         break;
                     case "MP":
                         change += pl.getMP();

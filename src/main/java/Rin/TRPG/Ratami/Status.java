@@ -28,16 +28,15 @@ public class Status implements CommandExecutor{
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
         /*
-        サーバーからのコマンドは受け付けない
+        オンラインのプレイヤー全員にスコアボードをセット
         */
-        if(!(sender instanceof Player))
-            return false;
+        for(Player player :plugin.getServer().getOnlinePlayers())
+            player.setScoreboard(scoreboard);
         /*
         PLプレイヤーのステータスを反映
          */
         for(String names :team.getEntries()){
             PL p = plugin.getPl().get(names);
-            p.getPlayer().setScoreboard(scoreboard);
             int health = (int)p.getHP();
             objective.getScore(p.getName()+"'s HP").setScore((int)(health));
             objective.getScore(p.getName()+"'s MP").setScore(p.getPlayer().getFoodLevel());
@@ -45,5 +44,5 @@ public class Status implements CommandExecutor{
         }
         return true;
     }
-    
+
 }

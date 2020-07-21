@@ -24,7 +24,7 @@ commands:
 
   kp:
     description: コマンド実行者をKPに設定
-    usage: /<command>
+    usage: /<command> (プレイヤー名)
     default: true
 
   pl:
@@ -47,11 +47,7 @@ commands:
     usage: /<command> プレイヤー名 表示名
     default: true
 
-  EnablePVP: 
+  enablepvp:
     description: PvPの可否を設定
     usage: /<command> enable|disable
     default: op
-
-  hp:
-    description: デバッグ用コマンド
-    dafault: true

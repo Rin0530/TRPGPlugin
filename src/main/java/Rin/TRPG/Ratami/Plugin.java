@@ -32,12 +32,11 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("roll").setExecutor(new roll(this));
         getCommand("book").setExecutor(new StatusBook(this));
         getCommand("statusSet").setExecutor(new StatusSet(this));
-        getCommand("KP").setExecutor(new KP(this));
-        getCommand("PL").setExecutor(new GiveBook(this));
+        getCommand("kp").setExecutor(new KP(this));
+        getCommand("pl").setExecutor(new GiveBook(this));
         getCommand("change").setExecutor(new change(this));
         getCommand("removeBook").setExecutor(new SetFinished(this));
-        getCommand("EnablePVP").setExecutor(new EnablePVP(this));
-        getCommand("hp").setExecutor(new HP(this));
+        getCommand("enablepvp").setExecutor(new EnablePVP(this));
         getCommand("reflectStatus").setExecutor(new Status(this));
         getCommand("displayname").setExecutor(new Name(this));
         getServer().getPluginManager().registerEvents(this,this);
@@ -90,12 +89,6 @@ public class Plugin extends JavaPlugin implements Listener{
         }else
             e.setCancelled(true);
             getServer().dispatchCommand(getServer().getConsoleSender(), "reflectstatus");
-    }
-
-    @EventHandler
-    public void onInteract(EntityDamageEvent e){
-        e.setCancelled(canDamaged);
-        getServer().dispatchCommand(getServer().getConsoleSender(), "reflectstatus");
     }
 
     @EventHandler

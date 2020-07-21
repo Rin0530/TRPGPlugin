@@ -43,10 +43,12 @@ public class KP implements CommandExecutor{
             player.getPlayer().setGameMode(GameMode.ADVENTURE);
             }
         plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "team join KP "+target);
-        if(sender instanceof Player){
-            plugin.getPl().get(target).setIsKP(true);
-            sender.setOp(true);
-        }
+        if(sender instanceof Player)
+            sender.sendMessage("KPになりました");
+        
+        plugin.getPl().get(target).setIsKP(true);
+        plugin.getPl().get(target).getPlayer().setOp(true);
+        
         return true;
     }
 }
