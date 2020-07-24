@@ -2,6 +2,7 @@ package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
@@ -11,7 +12,8 @@ import org.bukkit.scoreboard.Team.OptionStatus;
 public class PL{
     private String name;
     private String giveBook;
-    private int HP;
+    private int MP;
+    private double defaultHP;
     private Plugin plugin;
     private Player player;
     private HashMap<String,Integer> mainStatus;
@@ -27,9 +29,9 @@ public class PL{
         "STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU"
         };
 
-    private String[] sub = {
-        "LUCK", "IDEA", "knowledge"
-        };
+    /*private String[] sub = {
+        "Luck", "IDEA", "knowledge"
+        };*/
     private String[] other = {
             "回避", "キック", "組み付き", "こぶし（パンチ）", "頭突き", "投擲", "マーシャルアーツ", "拳銃", "サブマシンガン", "ショットガン", "マシンガン", "ライフル",
             "応急手当", "鍵開け", "隠す", "隠れる", "聞き耳", "忍び歩き", "写真術", "精神分析", "追跡", "登攀", "図書館", "目星",
@@ -42,8 +44,8 @@ public class PL{
         this.plugin = plugin;
         this.player = player;
         giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
-        HP = 20;
         isKP = false;
+        defaultHP = 20;
         mainStatus = new HashMap<>();
         otherStatus = new HashMap<String,Integer>(){{
             put("回避",0);
@@ -131,6 +133,8 @@ public class PL{
      */
     public void setHP(double HP){
         //HP1につき最大ハート1つになる
+        if(defaultHP == 20)
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HP);
         player.setHealth(HP);
     }
     /**
@@ -138,7 +142,7 @@ public class PL{
      * @param MP
      */
     public void setMP(int MP){
-        player.setFoodLevel(MP);
+        this.MP = MP;
     }
 
     /**
@@ -163,7 +167,7 @@ public class PL{
      * @return
      */
     public int getMP(){
-        return player.getFoodLevel();
+        return MP;
     }
 
     /**
@@ -199,10 +203,6 @@ public class PL{
         this.name = name;
     }
 
-    public double getMaxHealth(){
-        return player.getHealthScale() * player.getMaxHealth();
-    }
-
     /**
      * 能力値のセッター
      * @param statusName
@@ -215,7 +215,7 @@ public class PL{
         else if(statusName.equals("POW")){
             setSAN(num * 5);
             setMP(num);
-            subStatus.put("LUCK", num * 5);
+            subStatus.put("Luck", num * 5);
         }
         else if(statusName.equals("INT")){
             subStatus.put("IDEA", num * 5);
@@ -232,7 +232,7 @@ public class PL{
         else if(statusName.equals("CON") || statusName.equals("SIZ")){
             if(mainStatus.containsKey("CON") && mainStatus.containsKey("SIZ")){
                 double HP = (double)(mainStatus.get("CON")+mainStatus.get("SIZ")) /2.0;
-                player.setHealth(HP);
+                setHP(HP);
             }
         }
     }

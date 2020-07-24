@@ -28,7 +28,6 @@ public class StatusSet implements CommandExecutor{
             sender.sendMessage(args[1]+"を"+senderPL.getOtherStatus().get(args[1])+"に設定しました");
         }
         senderPL.getPlayer().getInventory().remove(senderPL.getPlayer().getInventory().getItemInMainHand());
-        //plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "clear "+sender.getName()+" minecraft:written_book{display:{Name:'{\"text\":\"数値設定本\",\"bold\":true}'}} 1");
         return true;
     }
 }

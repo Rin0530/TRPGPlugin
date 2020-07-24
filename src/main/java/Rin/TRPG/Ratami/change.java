@@ -29,12 +29,10 @@ public class change implements CommandExecutor{
                         break;
                     case "MP":
                         change += pl.getMP();
-                        plugin.setIsMagic(true);
                         pl.setMP(change);
                         break;
                     case "SAN":
                     case "SAN値":
-                        plugin.setIsMagic(false);
                         change += pl.getSAN();
                         if(change <= 0){
                             pl.setSAN(0);

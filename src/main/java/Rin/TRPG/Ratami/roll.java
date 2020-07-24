@@ -2,7 +2,6 @@ package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
 import java.util.Random;
-import org.bukkit.entity.Player;
 import org.bukkit.command.*;
 
 public class roll implements CommandExecutor{

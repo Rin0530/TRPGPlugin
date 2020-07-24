@@ -31,10 +31,12 @@ public class KP implements CommandExecutor{
         if(team==null){
             sender.sendMessage("PLがnullです");
             team  = board.getTeam("PL");
+            return true;
         }
+
+        plugin.setIsSession(true);
         String target = sender.getName();
-        if(args.length == 1)
-            target = args[0];
+
         for(String names :team.getEntries()){
             PL player = plugin.getPl().get(names);
             player.getPlayer().setOp(false);
@@ -42,12 +44,16 @@ public class KP implements CommandExecutor{
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "kill @e[type=item]");
             player.getPlayer().setGameMode(GameMode.ADVENTURE);
             }
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "team join KP "+target);
+        
         if(sender instanceof Player)
             sender.sendMessage("KPになりました");
         
         plugin.getPl().get(target).setIsKP(true);
         plugin.getPl().get(target).getPlayer().setOp(true);
+
+        if(args.length == 0 || !args[0].equals("npc")){
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "team join KP "+target);
+        }
         
         return true;
     }

@@ -7,9 +7,7 @@ import org.bukkit.GameRule;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.ItemDespawnEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin ;
@@ -21,8 +19,8 @@ import org.bukkit.plugin.java.JavaPlugin ;
  */
 public class Plugin extends JavaPlugin implements Listener{
     private HashMap<String,PL> pl;
-    private boolean isMagic;
     private boolean canDamaged;
+    private boolean isSession;
     
 
     @Override
@@ -55,8 +53,8 @@ public class Plugin extends JavaPlugin implements Listener{
         getServer().getWorld("world").setGameRule(GameRule.FIRE_DAMAGE, false);
         
 
-        isMagic = false;
         canDamaged = false;
+        isSession = false;
         getServer().getWorld("world").setPVP(canDamaged);
 
         pl = new HashMap<>();
@@ -72,7 +70,8 @@ public class Plugin extends JavaPlugin implements Listener{
     public void onLogin(PlayerJoinEvent e){
         e.getPlayer().sendMessage("TRPG鯖へようこそ！！");
         /*プレイヤーのオブジェクトを生成 */
-        pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
+        if(!pl.containsKey(e.getPlayer().getName()))
+            pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
         e.getPlayer().setOp(true);
     }
 
@@ -84,16 +83,7 @@ public class Plugin extends JavaPlugin implements Listener{
 
     @EventHandler
     public void onInteract(FoodLevelChangeEvent e){
-         if(isMagic){
-            isMagic = false;
-        }else
-            e.setCancelled(true);
             getServer().dispatchCommand(getServer().getConsoleSender(), "reflectstatus");
-    }
-
-    @EventHandler
-    public void onInteract(ItemDespawnEvent e){
-        e.setCancelled(true);
     }
 
     /**
@@ -101,15 +91,20 @@ public class Plugin extends JavaPlugin implements Listener{
      * @return
      */
     public HashMap<String,PL> getPl(){
-        return pl;     
+        return pl;
     }
 
-    public void setIsMagic(boolean isMagic){
-        this.isMagic = isMagic;
-    }
 
     public void setCanDamaged(boolean canDamaged){
         this.canDamaged = canDamaged;
+    }
+
+    public void setIsSession(boolean isSession){
+        this.isSession = isSession;
+    }
+
+    public boolean getIsSession(){
+        return isSession;
     }
 
 }

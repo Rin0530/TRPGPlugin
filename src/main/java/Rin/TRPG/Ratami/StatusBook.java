@@ -25,7 +25,7 @@ public class StatusBook implements CommandExecutor{
                     cmd += "]','[";
                 }
             }
-            cmd += "{\"text\":\"振り直し\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\"振り直し\"}]},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/statusset other "+args[1]+"  "+String.valueOf(0)+"\"}}";
+            cmd += "{\"text\":\"\"}";
             cmd += "]']}";
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), cmd);
         }
