@@ -4,7 +4,7 @@ import org.bukkit.scoreboard.*;
 import org.bukkit.command.*;
 
 public class Status implements CommandExecutor{
-    private final Plugin plugin;
+    private Plugin plugin;
     private ScoreboardManager manager;
     private Scoreboard scoreboard;
     private Objective objective;

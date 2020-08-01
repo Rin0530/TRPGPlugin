@@ -22,10 +22,10 @@ public class change implements CommandExecutor{
                         double hp = pl.getPlayer().getHealth();
                         change += hp;
                         if(change <= 0){
-                            pl.setHP(0);
+                            pl.setHP(0, false);
                             break;
                         }
-                        pl.setHP((double)change);
+                        pl.setHP((double)change, false);
                         break;
                     case "MP":
                         change += pl.getMP();

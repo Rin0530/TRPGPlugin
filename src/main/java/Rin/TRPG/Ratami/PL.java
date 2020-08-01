@@ -1,5 +1,7 @@
 package Rin.TRPG.Ratami;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.bukkit.attribute.Attribute;
@@ -13,26 +15,34 @@ public class PL{
     private String name;
     private String giveBook;
     private int MP;
-    private double defaultHP;
     private Plugin plugin;
     private Player player;
     private HashMap<String,Integer> mainStatus;
     private HashMap<String,Integer> subStatus;
     private HashMap<String,Integer> otherStatus;
     private HashMap<String,Integer> otherDef;
+    private ArrayList<String> other;
     private ScoreboardManager manager;
     private Scoreboard scoreboard1;
     private Team team1;
     private boolean isKP;
-    
+
     private String[] mains = {
         "STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU"
         };
 
-    /*private String[] sub = {
-        "Luck", "IDEA", "knowledge"
-        };*/
-    private String[] other = {
+    private String[] sub = {
+        "幸運", "アイデア", "器用", "知識"
+        };
+
+    public PL(Player player,Plugin plugin){
+        this.plugin = plugin;
+        this.player = player;
+        
+        isKP = false;
+        mainStatus = new HashMap<>();
+
+        String[] skillList = {
             "回避", "キック", "組み付き", "こぶし（パンチ）", "頭突き", "投擲", "マーシャルアーツ", "拳銃", "サブマシンガン", "ショットガン", "マシンガン", "ライフル",
             "応急手当", "鍵開け", "隠す", "隠れる", "聞き耳", "忍び歩き", "写真術", "精神分析", "追跡", "登攀", "図書館", "目星",
             "運転", "機械修理", "重機械操作", "乗馬", "水泳", "製作", "操縦", "跳躍", "電気修理", "ナビゲート", "変装",
@@ -40,13 +50,7 @@ public class PL{
             "医学", "オカルト", "化学", "クトゥルフ神話", "芸術", "経理", "考古学", "コンピューター", "心理学", "人類学", "生物学", "地質学", "電子工学", "天文学", "博物学", "物理学", "法律", "薬学", "歴史"
         };
 
-    public PL(Player player,Plugin plugin){
-        this.plugin = plugin;
-        this.player = player;
-        giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
-        isKP = false;
-        defaultHP = 20;
-        mainStatus = new HashMap<>();
+        other = new ArrayList<>(Arrays.asList(skillList));
         otherStatus = new HashMap<String,Integer>(){{
             put("回避",0);
             put("キック",25);
@@ -119,6 +123,7 @@ public class PL{
             team1 = scoreboard1.registerNewTeam("PL");
             team1.setDisplayName("PL");
             team1.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            team1.setCanSeeFriendlyInvisibles(false);
             team1 = scoreboard1.getTeam("PL");
         }
         
@@ -127,13 +132,14 @@ public class PL{
     }
 
 
+
     /**
      * HPのセッター
      * @param HP
      */
-    public void setHP(double HP){
+    public void setHP(double HP,boolean init){
         //HP1につき最大ハート1つになる
-        if(defaultHP == 20)
+        if(init)
             player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HP);
         player.setHealth(HP);
     }
@@ -210,29 +216,31 @@ public class PL{
      */
     public void setMainStatus(String statusName, int num){
         mainStatus.put(statusName, num);
-        if(statusName.equals("HP"))
+        /*if(statusName.equals("HP"))
             setHP(num);
-        else if(statusName.equals("POW")){
+        else */
+        if(statusName.equals("POW")){
             setSAN(num * 5);
             setMP(num);
-            subStatus.put("Luck", num * 5);
+            subStatus.put("幸運", num * 5);
         }
         else if(statusName.equals("INT")){
-            subStatus.put("IDEA", num * 5);
+            subStatus.put("アイデア", num * 5);
         }
         else if(statusName.equals("EDU")){
-            subStatus.put("knowledge", num * 5);
+            subStatus.put("知識", num * 5);
             otherStatus.put("母国語", num * 5);
             otherDef.put("母国語", num * 5);
         }
         else if(statusName.equals("DEX")){
             otherStatus.put("回避", num * 2);
             otherDef.put("回避", num * 2);
+            subStatus.put("器用", num * 5);
         }
         else if(statusName.equals("CON") || statusName.equals("SIZ")){
             if(mainStatus.containsKey("CON") && mainStatus.containsKey("SIZ")){
                 double HP = (double)(mainStatus.get("CON")+mainStatus.get("SIZ")) /2.0;
-                setHP(HP);
+                setHP(HP,true);
             }
         }
     }
@@ -248,6 +256,8 @@ public class PL{
             getPlayer().sendMessage("リセット");
         }else{
             otherStatus.put(statusName,num);
+            if(otherStatus.containsKey(statusName))
+                other.add(statusName);
         }
     }
 
@@ -292,13 +302,6 @@ public class PL{
         return giveBook;
     }
 
-    /**
-     * 技能値一覧を返す
-     * @return
-     */
-    public String[] getOther(){
-        return other;
-    }
 
     /**
      * Playerオブジェクトのゲッター
@@ -309,26 +312,27 @@ public class PL{
     }
 
     public void giveBook(CommandSender sender){
-        if(giveBook.length() > 250)
-            return;
+
         //能力値書き込み
+        giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
         for(String str : getMain())
             giveBook += ",{\"text\":\""+str+": "+String.valueOf(getMainStatus().get(str))+"\n\"}";
         giveBook += "]','[";
-        for(String str : getsubStatus().keySet()){
+        giveBook += "{\"text\":\"SAN: "+String.valueOf(getsubStatus().get("SAN"))+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 SAN\"}},";
+        for(String str : sub){
             giveBook += "{\"text\":\""+str+": "+String.valueOf(getsubStatus().get(str))+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+str+"\"}}";
-            if(!str.equals("knowledge")){
+            if(!(str.equals("知識"))){
                 giveBook += ",";
             }
         }
         giveBook += "]','[";
         //技能値書き込み
-        for(String str : getOther()){
-            giveBook += "{\"text\":\""+str+": "+String.valueOf(getOtherStatus().get(str))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+str+"\"}}";
-            if(str.equals("ライフル") || str.equals("目星") || str.equals("変装") || str.equals("母国語") || str.equals("コンピューター")){
+        for(int i = 0;i < other.size(); i++){
+            giveBook += "{\"text\":\""+other.get(i)+": "+String.valueOf(getOtherStatus().get(other.get(i)))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+other.get(i)+"\"}}";
+            if(other.get(i).equals("ライフル") || other.get(i).equals("目星") || other.get(i).equals("変装") || other.get(i).equals("母国語") || other.get(i).equals("コンピューター")){
                 giveBook += "]','[";
                 continue;
-            }else if(!(str.equals("歴史")))
+            }else if(!(i+1 == other.size()))
                 giveBook += ",";
         }
         giveBook += "]']}";
