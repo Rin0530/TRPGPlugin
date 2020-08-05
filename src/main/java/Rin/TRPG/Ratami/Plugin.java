@@ -2,15 +2,20 @@ package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
 
+
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin ;
+import org.bukkit.scoreboard.Scoreboard;
+import org.bukkit.scoreboard.ScoreboardManager;
+import org.bukkit.scoreboard.Team;
+import org.bukkit.scoreboard.Team.Option;
+import org.bukkit.scoreboard.Team.OptionStatus;
 
 
 /**
@@ -19,12 +24,51 @@ import org.bukkit.plugin.java.JavaPlugin ;
  */
 public class Plugin extends JavaPlugin implements Listener{
     private HashMap<String,PL> pl;
-    private boolean canDamaged;
-    private boolean isSession;
+    private Status status;
+    private Scoreboard board_pl;
+    private Scoreboard board_kp;
+    private Scoreboard board_viewer;
+    private ScoreboardManager manager;
+    private Team PL;
+    private Team KP;
+    private Team Viewer;
     
 
     @Override
     public void onEnable() {
+
+        // Team設定
+        manager = getServer().getScoreboardManager();
+        board_pl = manager.getMainScoreboard();
+        board_kp = manager.getNewScoreboard();
+        board_viewer = manager.getNewScoreboard();
+
+        PL = board_pl.getTeam("PL");
+        if(PL == null){
+            PL = board_pl.registerNewTeam("PL");
+            PL.setDisplayName("PL");
+            PL.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            PL.setCanSeeFriendlyInvisibles(false);
+            PL = board_pl.getTeam("PL");
+        }
+
+        KP = board_kp.getTeam("KP");
+        if(KP == null){
+            KP = board_kp.registerNewTeam("KP");
+            KP.setDisplayName("KP");
+            KP.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            KP.setCanSeeFriendlyInvisibles(false);
+            KP = board_kp.getTeam("KP");
+        }
+
+        Viewer = board_viewer.getTeam("VIEWER");
+        if(Viewer == null){
+            Viewer = board_viewer.registerNewTeam("VIEWER");
+            Viewer.setDisplayName("VIEWER");
+            Viewer.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            Viewer.setCanSeeFriendlyInvisibles(false);
+            Viewer = board_viewer.getTeam("VIEWER");
+        }
 
         /* コマンド有効化*/  
         getCommand("roll").setExecutor(new roll(this));
@@ -35,8 +79,8 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("change").setExecutor(new change(this));
         getCommand("removeBook").setExecutor(new SetFinished(this));
         getCommand("enablepvp").setExecutor(new EnablePVP(this));
-        getCommand("reflectStatus").setExecutor(new Status(this));
         getCommand("displayname").setExecutor(new Name(this));
+        getCommand("reflect").setExecutor(new Status(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, SpigotMC!");
 
@@ -45,21 +89,19 @@ public class Plugin extends JavaPlugin implements Listener{
         getServer().getWorld("world").setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, false);
         getServer().getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
         getServer().getWorld("world").setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        getServer().getWorld("world").setGameRule(GameRule.DO_MOB_SPAWNING, false);
         getServer().getWorld("world").setGameRule(GameRule.NATURAL_REGENERATION, false);
         getServer().getWorld("world").setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false);
         getServer().getWorld("world").setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
         getServer().getWorld("world").setGameRule(GameRule.FALL_DAMAGE, false);
         getServer().getWorld("world").setGameRule(GameRule.FIRE_DAMAGE, false);
+        getServer().getWorld("world").setPVP(false);
+  
         
-
-        canDamaged = false;
-        isSession = false;
-        getServer().getWorld("world").setPVP(canDamaged);
 
         pl = new HashMap<>();
     }
     
+
     @Override
     public void onDisable() {
         getLogger().info("See you again, SpigotMC!");
@@ -72,18 +114,16 @@ public class Plugin extends JavaPlugin implements Listener{
         /*プレイヤーのオブジェクトを生成 */
         if(!pl.containsKey(e.getPlayer().getName()))
             pl.put(e.getPlayer().getName(), new PL(e.getPlayer(), this));
-        e.getPlayer().setOp(true);
     }
 
+    /**
+     * プレイヤーが死亡したとき即座にスペクテイターでリスポーン
+     * @param e
+     */
     @EventHandler
     public void onInteract(PlayerDeathEvent e){
         HumanEntity entity = e.getEntity();
         entity.setGameMode(GameMode.SPECTATOR);
-    }
-
-    @EventHandler
-    public void onInteract(FoodLevelChangeEvent e){
-            getServer().dispatchCommand(getServer().getConsoleSender(), "reflectstatus");
     }
 
     /**
@@ -94,17 +134,16 @@ public class Plugin extends JavaPlugin implements Listener{
         return pl;
     }
 
-
-    public void setCanDamaged(boolean canDamaged){
-        this.canDamaged = canDamaged;
+    public Team getPLTeam(){
+        return PL;
     }
 
-    public void setIsSession(boolean isSession){
-        this.isSession = isSession;
+    public Team getKPTeam(){
+        return KP;
     }
 
-    public boolean getIsSession(){
-        return isSession;
+    public Team getViewerTeam(){
+        return Viewer;
     }
 
 }

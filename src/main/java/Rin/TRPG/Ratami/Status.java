@@ -1,7 +1,10 @@
 package Rin.TRPG.Ratami;
 
-import org.bukkit.scoreboard.*;
 import org.bukkit.command.*;
+import org.bukkit.scoreboard.*;
+
+import net.md_5.bungee.api.ChatMessageType;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class Status implements CommandExecutor{
     private Plugin plugin;
@@ -21,12 +24,8 @@ public class Status implements CommandExecutor{
         }
     }
 
-    @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        if(!plugin.getIsSession()){
-            return true;
-        }
         /*
         オンラインのプレイヤー全員にスコアボードをセット
         */
@@ -34,12 +33,19 @@ public class Status implements CommandExecutor{
             PL p = plugin.getPl().get(names);
             p.getPlayer().setScoreboard(scoreboard);
             
-            if(p.getName().equals(null))
-                break;
+            if(!(p.getName().equals(null))){
             int health = (int)p.getHP();
-            objective.getScore(p.getName()+"'s HP").setScore((int)(health));
+            objective.getScore(p.getName()+"'s HP").setScore((int)health);
             objective.getScore(p.getName()+"'s MP").setScore(p.getMP());
             objective.getScore(p.getName()+"'s SAN").setScore(p.getPlayer().getLevel());
+
+            // アクションバーにMPを表示
+            String displayMP = "MP " + String.valueOf(p.getMP());
+            TextComponent component = new TextComponent();
+            component.setText(displayMP);
+            p.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+            }
+        
         }
         return true;
     }

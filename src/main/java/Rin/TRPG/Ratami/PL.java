@@ -8,8 +8,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
-import org.bukkit.scoreboard.Team.Option;
-import org.bukkit.scoreboard.Team.OptionStatus;
+
 
 public class PL{
     private String name;
@@ -24,7 +23,6 @@ public class PL{
     private ArrayList<String> other;
     private ScoreboardManager manager;
     private Scoreboard scoreboard1;
-    private Team team1;
     private boolean isKP;
 
     private String[] mains = {
@@ -118,6 +116,7 @@ public class PL{
         plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"team add PL");
         manager = plugin.getServer().getScoreboardManager();
         scoreboard1 = manager.getNewScoreboard();
+        /*
         team1 = scoreboard1.getTeam("PL");
         if(team1 == null){
             team1 = scoreboard1.registerNewTeam("PL");
@@ -126,7 +125,8 @@ public class PL{
             team1.setCanSeeFriendlyInvisibles(false);
             team1 = scoreboard1.getTeam("PL");
         }
-        
+        team1 = scoreboard1.getTeam("PL");
+        */
         player.setScoreboard(scoreboard1);
         otherDef = new HashMap<>(otherStatus);
     }
@@ -185,13 +185,17 @@ public class PL{
     }
 
     /**
-     * KPかどうかのゲッター
+     * KPかどうかのセッター
      * @param isKP
      */
     public void setIsKP(boolean isKP){
         this.isKP = isKP;
     }
 
+    /**
+     * KPかどうかのゲッター
+     * @return
+     */
     public boolean getIsKP(){
         return isKP;
     }
@@ -327,10 +331,13 @@ public class PL{
         }
         giveBook += "]','[";
         //技能値書き込み
+        int line = 0;
         for(int i = 0;i < other.size(); i++){
+            line++;
             giveBook += "{\"text\":\""+other.get(i)+": "+String.valueOf(getOtherStatus().get(other.get(i)))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+other.get(i)+"\"}}";
-            if(other.get(i).equals("ライフル") || other.get(i).equals("目星") || other.get(i).equals("変装") || other.get(i).equals("母国語") || other.get(i).equals("コンピューター")){
+            if(other.get(i).equals("ライフル") || other.get(i).equals("目星") || other.get(i).equals("変装") || other.get(i).equals("母国語") || other.get(i).equals("コンピューター") || line == 12){
                 giveBook += "]','[";
+                line = 0;
                 continue;
             }else if(!(i+1 == other.size()))
                 giveBook += ",";

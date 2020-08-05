@@ -11,50 +11,65 @@ public class KP implements CommandExecutor{
     private Plugin plugin;
     Scoreboard board;
     ScoreboardManager manager;
-    Team team;
+    Team player;
+    Team keeper;
     
 
     public KP(Plugin plugin){
         this.plugin = plugin;
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"team add KP");
-        manager = plugin.getServer().getScoreboardManager();
+        /*manager = plugin.getServer().getScoreboardManager();
         board = manager.getMainScoreboard();
         team  = board.getTeam("PL");
         if(team == null){
+            team = board.registerNewTeam("PL");
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "say PLチームの取得に失敗");
-        }
+            team  = board.getTeam("PL");
+        }*/
+        player = plugin.getPLTeam();
+        keeper = plugin.getKPTeam();
     }
 
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        if(team==null){
-            sender.sendMessage("PLがnullです");
-            team  = board.getTeam("PL");
+
+        if(!(sender instanceof Player)){
+            sender.sendMessage("サーバーからの実行は禁止です");
             return true;
         }
 
-        plugin.setIsSession(true);
+        
         String target = sender.getName();
 
-        for(String names :team.getEntries()){
-            PL player = plugin.getPl().get(names);
-            player.getPlayer().setOp(false);
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"give " + names +player.getGiveBook());
-            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "kill @e[type=item]");
-            player.getPlayer().setGameMode(GameMode.ADVENTURE);
-            }
+        boolean haveKP = false;
+
+        for(String name: plugin.getPl().keySet()){
+            haveKP = plugin.getPl().get(name).getIsKP();
+            if(haveKP)
+                break;
+        }
+
+        if(!haveKP){
+            for(String names :player.getEntries()){
+                PL player = plugin.getPl().get(names);
+                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "deop "+ names);
+                player.setIsKP(false);
+                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"give " + names +player.getGiveBook());
+                player.getPlayer().setGameMode(GameMode.ADVENTURE);
+                }
+        }
         
-        if(sender instanceof Player)
-            sender.sendMessage("KPになりました");
         
         plugin.getPl().get(target).setIsKP(true);
         plugin.getPl().get(target).getPlayer().setOp(true);
 
-        if(args.length == 0 || !args[0].equals("npc")){
+        if(args.length == 0 || !args[0].equals("kpc")){
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "team join KP "+target);
+            sender.sendMessage("KPになりました");
+        }else if(sender instanceof Player){
+            sender.sendMessage("KPCになりました");
+            plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "team join PL "+target);
         }
-        
         return true;
     }
 }

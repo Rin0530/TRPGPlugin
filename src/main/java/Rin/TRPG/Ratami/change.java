@@ -44,9 +44,9 @@ public class change implements CommandExecutor{
                         return false;
                 }
             }catch(Exception e) {
+                sender.sendMessage(e.toString());
                 return false;
             }
-        plugin.getServer().dispatchCommand(sender, "reflectStatus");
         return true;
     }
 }

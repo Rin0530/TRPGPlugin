@@ -9,11 +9,6 @@ commands:
     usage: /<command> 1D100 (secret) 技能名
     default: true
 
-  reflectStatus:
-    description: PLのステータスをスコアボードに反映
-    usage: /<command>
-    default: op
-
   book:
     description: ステータス設定用本配布コマンド.直接実行することはない
     default: true
@@ -24,7 +19,7 @@ commands:
 
   kp:
     description: コマンド実行者をKPに設定
-    usage: /<command> (プレイヤー名)
+    usage: /<command> (kpc)
     default: true
 
   pl:
@@ -51,3 +46,8 @@ commands:
     description: PvPの可否を設定
     usage: /<command> enable|disable
     default: op
+
+  reflect:
+    description: 探索者のステータスをスコアボードとアクションバーに反映
+    usage: <command>
+    default: true

@@ -3,6 +3,7 @@ package Rin.TRPG.Ratami;
 import java.util.HashMap;
 import java.util.Random;
 import org.bukkit.command.*;
+import org.bukkit.entity.Player;
 
 public class roll implements CommandExecutor{
 
@@ -73,13 +74,15 @@ public class roll implements CommandExecutor{
                         for(String name : plugin.getPl().keySet()){
                             PL p = plugin.getPl().get(name);
                             if(p.getIsKP() && !sender.getName().equals(p.getPlayer().getName())){
+                                p.getPlayer().sendMessage("KPに通知");
                                 p.getPlayer().sendMessage(result);
                             }
                         }
                         continue;
                     }
                 }
-                sender.sendMessage(result);
+                for(Player player: plugin.getServer().getOnlinePlayers())
+                    player.sendMessage(result);
             }
         } catch (Exception e) {
             sender.sendMessage(e.toString()+"\nコマンドのオプションが間違っています");
