@@ -24,7 +24,6 @@ import org.bukkit.scoreboard.Team.OptionStatus;
  */
 public class Plugin extends JavaPlugin implements Listener{
     private HashMap<String,PL> pl;
-    private Status status;
     private Scoreboard board_pl;
     private Scoreboard board_kp;
     private Scoreboard board_viewer;

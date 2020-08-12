@@ -1,11 +1,12 @@
-name: ${project.artifactId}
+name: TRPGplugin
+api: 1.16.1
 version: ${project.version}
-main: ${project.groupId}.Plugin
-api-version: 1.14
+main: Rin.TRPG.Ratami.Plugin
+api-version: "1.16"
 
 commands:
   roll:
-    description: 引数で振るダイスを指定.2つ目の引数にsecretを入れると自分のKPにのみ結果を通知
+    description: 引数で振るダイスを指定.2つ目の引数にsecretを入れると自分とKPにのみ結果を通知
     usage: /<command> 1D100 (secret) 技能名
     default: true
 

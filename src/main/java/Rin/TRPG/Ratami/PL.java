@@ -259,9 +259,9 @@ public class PL{
             otherStatus.put(statusName,otherDef.get(statusName));
             getPlayer().sendMessage("リセット");
         }else{
-            otherStatus.put(statusName,num);
-            if(otherStatus.containsKey(statusName))
+            if(!otherStatus.containsKey(statusName))
                 other.add(statusName);
+            otherStatus.put(statusName,num);
         }
     }
 

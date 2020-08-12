@@ -2,8 +2,13 @@ package Rin.TRPG.Ratami;
 
 import java.util.HashMap;
 import java.util.Random;
+
+import org.bukkit.Color;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+
+import net.md_5.bungee.api.ChatColor;
+import net.md_5.bungee.api.chat.TextComponent;
 
 public class roll implements CommandExecutor{
 
@@ -20,12 +25,15 @@ public class roll implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
+        
+        TextComponent component = new TextComponent();
 
         /*引数に整数以外が与えられた場合の例外処理*/
         try {
             String[] diceRoll = args[0].split("D");
             int parseInt = Integer.parseInt(diceRoll[1]);
             int random = -1;
+            String color = "white";
             //技能値を取得
             HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
 
@@ -33,8 +41,8 @@ public class roll implements CommandExecutor{
                 random = new Random().nextInt(parseInt) + 1;
                 
                 String skill = "";
-                String result = String.valueOf(random);
                 String senderName = plugin.getPl().get(sender.getName()).getName();
+                String result = senderName + " " + String.valueOf(random);
                 
                 if(args.length >= 2){
 
@@ -59,33 +67,51 @@ public class roll implements CommandExecutor{
                                 result += " 致命的";
                             }
                             result += "失敗";
+                            component.setColor(ChatColor.RED);
+                            color = "red";
                         }
                         else{
                             result += " >= "+ String.valueOf(random);
+                            
                             if(random <= 5){
                                 result += " 決定的";
+                                //component.setColor(ChatColor.BLUE);
                             }
                             result += "成功";
+                            component.setColor(ChatColor.AQUA);
+                            color = "aqua";
                         }
                     }
+
+                    component.setText(result);
+                    
                     /*オプションでsecretが指定されれば自分とKPにのみ通知 */
                     if(args[1].equals("secret")){
-                        sender.sendMessage(result);
+                        sender.spigot().sendMessage(component);
+                        //sender.sendMessage(result);
+                        plugin.getLogger().info(result);
+                        //plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "tellraw @a[team=KP] {\"text\":\""+result+"\",\"color\":\""+color+"\"}");
                         for(String name : plugin.getPl().keySet()){
                             PL p = plugin.getPl().get(name);
                             if(p.getIsKP() && !sender.getName().equals(p.getPlayer().getName())){
                                 p.getPlayer().sendMessage("KPに通知");
-                                p.getPlayer().sendMessage(result);
+                                p.getPlayer().spigot().sendMessage(component);
                             }
                         }
                         continue;
                     }
                 }
-                for(Player player: plugin.getServer().getOnlinePlayers())
-                    player.sendMessage(result);
+
+                if(component.getText().equals(""))
+                    component.setText(result);
+
+                for(Player player: plugin.getServer().getOnlinePlayers()){
+                    player.spigot().sendMessage(component);
+                    //player.sendMessage(result);
+                }
             }
         } catch (Exception e) {
-            sender.sendMessage(e.toString()+"\nコマンドのオプションが間違っています");
+            plugin.getLogger().info(e.toString()+"\nコマンドのオプションが間違っています");
             return false;
         }
         return true;
