@@ -1,6 +1,7 @@
 package Rin.TRPG.Ratami;
 
 import org.bukkit.command.*;
+import org.bukkit.entity.Player;
 
 public class change implements CommandExecutor{
     private Plugin plugin;
@@ -16,29 +17,42 @@ public class change implements CommandExecutor{
             return false;
         int change = Integer.parseInt(args[2]);
         PL pl = plugin.getPl().get(args[0]);
+        int before = 0;
+        int after = 0;
             try {
                 switch(args[1]){
                     case "HP":
-                        double hp = pl.getPlayer().getHealth();
-                        change += hp;
+                        before = (int)pl.getHP();
+                        change += before;
                         if(change <= 0){
                             pl.setHP(0, false);
+                            after = 0;
                             break;
                         }
                         pl.setHP((double)change, false);
+                        after = (int)pl.getHP();
                         break;
                     case "MP":
-                        change += pl.getMP();
+                        before = pl.getMP();
+                        change += before;
+                        if(change <= 0){
+                            pl.setMP(0);
+                            break;
+                        }
                         pl.setMP(change);
+                        after = pl.getMP();
                         break;
                     case "SAN":
                     case "SAN値":
-                        change += pl.getSAN();
+                        before = pl.getSAN();
+                        change += before;
                         if(change <= 0){
                             pl.setSAN(0);
+                            after = 0;
                             break;
                         }
                         pl.setSAN(change);
+                        after = pl.getSAN();
                         break;
                     default:
                         return false;
@@ -47,6 +61,8 @@ public class change implements CommandExecutor{
                 sender.sendMessage(e.toString());
                 return false;
             }
+        for(Player player :plugin.getServer().getOnlinePlayers())
+            player.sendMessage(args[0]+ " " +args[1]+ ":" +before+ "→" +after);
         return true;
     }
 }

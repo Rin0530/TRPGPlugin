@@ -3,7 +3,6 @@ package Rin.TRPG.Ratami;
 import java.util.HashMap;
 import java.util.Random;
 
-import org.bukkit.Color;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -33,7 +32,6 @@ public class roll implements CommandExecutor{
             String[] diceRoll = args[0].split("D");
             int parseInt = Integer.parseInt(diceRoll[1]);
             int random = -1;
-            String color = "white";
             //技能値を取得
             HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
 
@@ -68,7 +66,6 @@ public class roll implements CommandExecutor{
                             }
                             result += "失敗";
                             component.setColor(ChatColor.RED);
-                            color = "red";
                         }
                         else{
                             result += " >= "+ String.valueOf(random);
@@ -79,7 +76,6 @@ public class roll implements CommandExecutor{
                             }
                             result += "成功";
                             component.setColor(ChatColor.AQUA);
-                            color = "aqua";
                         }
                     }
 
@@ -90,7 +86,6 @@ public class roll implements CommandExecutor{
                         sender.spigot().sendMessage(component);
                         //sender.sendMessage(result);
                         plugin.getLogger().info(result);
-                        //plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "tellraw @a[team=KP] {\"text\":\""+result+"\",\"color\":\""+color+"\"}");
                         for(String name : plugin.getPl().keySet()){
                             PL p = plugin.getPl().get(name);
                             if(p.getIsKP() && !sender.getName().equals(p.getPlayer().getName())){

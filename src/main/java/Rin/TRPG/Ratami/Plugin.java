@@ -81,7 +81,7 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("displayname").setExecutor(new Name(this));
         getCommand("reflect").setExecutor(new Status(this));
         getServer().getPluginManager().registerEvents(this,this);
-        getLogger().info("Hello, SpigotMC!");
+        getLogger().info("Hello, TRPG!");
 
         //ゲームルール設定
         getServer().getWorld("world").setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
@@ -103,7 +103,7 @@ public class Plugin extends JavaPlugin implements Listener{
 
     @Override
     public void onDisable() {
-        getLogger().info("See you again, SpigotMC!");
+        getLogger().info("See you again, TRPG!");
         getServer().dispatchCommand(getServer().getConsoleSender(), "scoreboard objectives remove Status");
     }
 

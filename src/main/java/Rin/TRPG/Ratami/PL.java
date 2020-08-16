@@ -14,7 +14,7 @@ public class PL{
     private String name;
     private String giveBook;
     private int MP;
-    private Plugin plugin;
+    //private Plugin plugin;
     private Player player;
     private HashMap<String,Integer> mainStatus;
     private HashMap<String,Integer> subStatus;
@@ -34,7 +34,7 @@ public class PL{
         };
 
     public PL(Player player,Plugin plugin){
-        this.plugin = plugin;
+       //this.plugin = plugin;
         this.player = player;
         
         isKP = false;
@@ -140,8 +140,8 @@ public class PL{
     public void setHP(double HP,boolean init){
         //HP1につき最大ハート1つになる
         if(init)
-            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(HP);
-        player.setHealth(HP);
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Math.round(HP));
+        player.setHealth(Math.round(HP));
     }
     /**
      * MPのセッター
@@ -208,6 +208,10 @@ public class PL{
         return name;
     }
 
+    /**
+     * 名前のセッター
+     * @param name
+     */
     public void setName(String name){
         getPlayer().setDisplayName(name);
         this.name = name;

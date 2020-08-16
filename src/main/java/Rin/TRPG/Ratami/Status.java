@@ -10,12 +10,14 @@ public class Status implements CommandExecutor{
     private Plugin plugin;
     private ScoreboardManager manager;
     private Scoreboard scoreboard;
+    private Team team;
     private Objective objective;
 
     public Status(Plugin plugin){
         this.plugin = plugin;
         manager = plugin.getServer().getScoreboardManager();
         scoreboard = manager.getMainScoreboard();
+        team = plugin.getPLTeam();
         objective = scoreboard.getObjective("Status");
         if(objective == null){
             objective = scoreboard.registerNewObjective("Status", "dummy","Player's Status");
@@ -33,17 +35,18 @@ public class Status implements CommandExecutor{
             PL p = plugin.getPl().get(names);
             p.getPlayer().setScoreboard(scoreboard);
             
-            if(!(p.getName().equals(null))){
-            int health = (int)p.getHP();
-            objective.getScore(p.getName()+"'s HP").setScore((int)health);
-            objective.getScore(p.getName()+"'s MP").setScore(p.getMP());
-            objective.getScore(p.getName()+"'s SAN").setScore(p.getPlayer().getLevel());
+            //plugin.getServer().getLogger().info(names);
+            if(team.getEntries().contains(names)){
+                int health = (int)p.getHP();
+                objective.getScore(p.getName()+"'s HP").setScore((int)health);
+                objective.getScore(p.getName()+"'s MP").setScore(p.getMP());
+                objective.getScore(p.getName()+"'s SAN").setScore(p.getPlayer().getLevel());
 
-            // アクションバーにMPを表示
-            String displayMP = "MP " + String.valueOf(p.getMP());
-            TextComponent component = new TextComponent();
-            component.setText(displayMP);
-            p.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
+                // アクションバーにMPを表示
+                String displayMP = "MP " + String.valueOf(p.getMP());
+                TextComponent component = new TextComponent();
+                component.setText(displayMP);
+                p.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
             }
         
         }
