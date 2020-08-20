@@ -18,20 +18,18 @@ public class Status implements CommandExecutor{
         manager = plugin.getServer().getScoreboardManager();
         scoreboard = manager.getMainScoreboard();
         team = plugin.getPLTeam();
-        
-    }
-
-    public boolean onCommand(CommandSender sender,Command command, String label,
-    String[] args){
-        if(objective != null) 
-            objective.unregister();
-            
         objective = scoreboard.getObjective("Status");
         if(objective == null){
             objective = scoreboard.registerNewObjective("Status", "dummy","Player's Status");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
             objective =scoreboard.getObjective("Status");
         }
+        
+    }
+
+    public boolean onCommand(CommandSender sender,Command command, String label,
+    String[] args){
+        
         int num = -1;
         /*
         オンラインのプレイヤー全員にスコアボードをセット
@@ -43,6 +41,11 @@ public class Status implements CommandExecutor{
             //plugin.getServer().getLogger().info(names);
             if(team.getEntries().contains(names)){
                 int health = (int)p.getHP();
+
+                recreate(p.getName()+"'s HP "+String.valueOf(health));
+                recreate(p.getName()+"'s MP "+String.valueOf(p.getMP()));
+                recreate(p.getName()+"'s SAN "+String.valueOf(p.getSAN()));
+
                 objective.getScore(p.getName()+"'s HP "+String.valueOf(health)).setScore(num--);
                 objective.getScore(p.getName()+"'s MP "+String.valueOf(p.getMP())).setScore(num--);
                 objective.getScore(p.getName()+"'s SAN "+String.valueOf(p.getSAN())).setScore(num--);
@@ -57,6 +60,18 @@ public class Status implements CommandExecutor{
         }
         //num = -1;
         return true;
+    }
+
+    public void recreate(String score){
+        if(!objective.getScore(score).isScoreSet()){
+            objective.unregister();
+            objective = scoreboard.getObjective("Status");
+            if(objective == null){
+                objective = scoreboard.registerNewObjective("Status", "dummy","Player's Status");
+                objective.setDisplaySlot(DisplaySlot.SIDEBAR);
+                objective =scoreboard.getObjective("Status");
+            }
+        }
     }
 
 }
