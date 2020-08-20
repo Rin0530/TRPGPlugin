@@ -62,7 +62,7 @@ public class change implements CommandExecutor{
                 return false;
             }
         for(Player player :plugin.getServer().getOnlinePlayers())
-            player.sendMessage(args[0]+ " " +args[1]+ ":" +before+ "→" +after);
+            player.sendMessage(plugin.getPl().get(args[0]).getName()+ " " +args[1]+ ":" +before+ "→" +after);
         return true;
     }
 }

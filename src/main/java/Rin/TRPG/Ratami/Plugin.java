@@ -47,6 +47,7 @@ public class Plugin extends JavaPlugin implements Listener{
             PL = board_pl.registerNewTeam("PL");
             PL.setDisplayName("PL");
             PL.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            PL.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
             PL.setCanSeeFriendlyInvisibles(false);
             PL = board_pl.getTeam("PL");
         }
@@ -56,6 +57,7 @@ public class Plugin extends JavaPlugin implements Listener{
             KP = board_kp.registerNewTeam("KP");
             KP.setDisplayName("KP");
             KP.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            KP.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
             KP.setCanSeeFriendlyInvisibles(false);
             KP = board_kp.getTeam("KP");
         }
@@ -65,6 +67,7 @@ public class Plugin extends JavaPlugin implements Listener{
             Viewer = board_viewer.registerNewTeam("VIEWER");
             Viewer.setDisplayName("VIEWER");
             Viewer.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
+            Viewer.setOption(Option.COLLISION_RULE, OptionStatus.NEVER);
             Viewer.setCanSeeFriendlyInvisibles(false);
             Viewer = board_viewer.getTeam("VIEWER");
         }
@@ -74,7 +77,7 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("book").setExecutor(new StatusBook(this));
         getCommand("statusSet").setExecutor(new StatusSet(this));
         getCommand("kp").setExecutor(new KP(this));
-        getCommand("pl").setExecutor(new GiveBook(this));
+        getCommand("pc").setExecutor(new GiveBook(this));
         getCommand("change").setExecutor(new change(this));
         getCommand("removeBook").setExecutor(new SetFinished(this));
         getCommand("enablepvp").setExecutor(new EnablePVP(this));

@@ -1,8 +1,7 @@
 package Rin.TRPG.Ratami;
 
+import java.security.SecureRandom;
 import java.util.HashMap;
-import java.util.Random;
-
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -31,12 +30,14 @@ public class roll implements CommandExecutor{
         try {
             String[] diceRoll = args[0].split("D");
             int parseInt = Integer.parseInt(diceRoll[1]);
+            
             int random = -1;
             //技能値を取得
             HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
 
             for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
-                random = new Random().nextInt(parseInt) + 1;
+                SecureRandom seed = SecureRandom.getInstance("SHA1PRNG");
+                random = seed.nextInt(parseInt) + 1;
                 
                 String skill = "";
                 String senderName = plugin.getPl().get(sender.getName()).getName();

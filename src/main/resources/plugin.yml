@@ -23,7 +23,7 @@ commands:
     usage: /<command> (kpc)
     default: true
 
-  pl:
+  pc:
     description: 実行者をPLに設定&ステータス設定本を配布
     usage: /<command>
     default: true

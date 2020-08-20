@@ -18,16 +18,21 @@ public class Status implements CommandExecutor{
         manager = plugin.getServer().getScoreboardManager();
         scoreboard = manager.getMainScoreboard();
         team = plugin.getPLTeam();
+        
+    }
+
+    public boolean onCommand(CommandSender sender,Command command, String label,
+    String[] args){
+        if(objective != null) 
+            objective.unregister();
+            
         objective = scoreboard.getObjective("Status");
         if(objective == null){
             objective = scoreboard.registerNewObjective("Status", "dummy","Player's Status");
             objective.setDisplaySlot(DisplaySlot.SIDEBAR);
             objective =scoreboard.getObjective("Status");
         }
-    }
-
-    public boolean onCommand(CommandSender sender,Command command, String label,
-    String[] args){
+        int num = -1;
         /*
         オンラインのプレイヤー全員にスコアボードをセット
         */
@@ -38,9 +43,9 @@ public class Status implements CommandExecutor{
             //plugin.getServer().getLogger().info(names);
             if(team.getEntries().contains(names)){
                 int health = (int)p.getHP();
-                objective.getScore(p.getName()+"'s HP").setScore((int)health);
-                objective.getScore(p.getName()+"'s MP").setScore(p.getMP());
-                objective.getScore(p.getName()+"'s SAN").setScore(p.getPlayer().getLevel());
+                objective.getScore(p.getName()+"'s HP "+String.valueOf(health)).setScore(num--);
+                objective.getScore(p.getName()+"'s MP "+String.valueOf(p.getMP())).setScore(num--);
+                objective.getScore(p.getName()+"'s SAN "+String.valueOf(p.getSAN())).setScore(num--);
 
                 // アクションバーにMPを表示
                 String displayMP = "MP " + String.valueOf(p.getMP());
@@ -50,6 +55,7 @@ public class Status implements CommandExecutor{
             }
         
         }
+        //num = -1;
         return true;
     }
 
