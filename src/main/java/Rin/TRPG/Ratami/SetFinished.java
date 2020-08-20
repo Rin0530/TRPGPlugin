@@ -18,9 +18,14 @@ public class SetFinished implements CommandExecutor{
             return true;
         }
         PL senderPL = plugin.getPl().get(sender.getName());
+        for(String value :senderPL.getMainStatus().keySet()){
+            if(senderPL.getMainStatus().get(value) == -1){
+                sender.sendMessage(value+"が設定されていません");
+                return true;
+            }
+        }
         senderPL.getPlayer().getInventory().remove(senderPL.getPlayer().getInventory().getItemInMainHand());
-        PL pl = plugin.getPl().get(sender.getName());
-        pl.giveBook(sender);
+        senderPL.giveBook(sender);
         return true;
     }
 }

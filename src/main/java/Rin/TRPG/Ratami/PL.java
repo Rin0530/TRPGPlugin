@@ -38,7 +38,16 @@ public class PL{
         this.player = player;
         
         isKP = false;
-        mainStatus = new HashMap<>();
+        mainStatus = new HashMap<String,Integer>(){{
+            put("STR",-1);
+            put("CON",-1);
+            put("POW",-1);
+            put("DEX",-1);
+            put("APP",-1);
+            put("SIZ",-1);
+            put("INT",-1);
+            put("EDU",-1);
+        }};
 
         String[] skillList = {
             "回避", "キック", "組み付き", "こぶし（パンチ）", "頭突き", "投擲", "マーシャルアーツ", "拳銃", "サブマシンガン", "ショットガン", "マシンガン", "ライフル",
