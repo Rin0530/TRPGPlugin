@@ -1,5 +1,6 @@
 package Rin.TRPG.Ratami;
 
+import org.bukkit.attribute.Attribute;
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
 
@@ -28,6 +29,9 @@ public class change implements CommandExecutor{
                             pl.setHP(0, false);
                             after = 0;
                             break;
+                        }
+                        if(change > pl.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue()){
+                            change = (int)pl.getPlayer().getAttribute(Attribute.GENERIC_MAX_HEALTH).getBaseValue();
                         }
                         pl.setHP((double)change, false);
                         after = (int)pl.getHP();
