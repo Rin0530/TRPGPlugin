@@ -5,7 +5,9 @@ import java.util.HashMap;
 
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;

@@ -9,7 +9,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.*;
 
-
+@SuppressWarnings("serial") 
 public class PL{
     private String name;
     private String giveBook;
@@ -23,7 +23,6 @@ public class PL{
     private ArrayList<String> other;
     private ScoreboardManager manager;
     private Scoreboard scoreboard1;
-    private boolean isKP;
 
     private String[] mains = {
         "STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU"
@@ -37,7 +36,6 @@ public class PL{
        //this.plugin = plugin;
         this.player = player;
         
-        isKP = false;
         mainStatus = new HashMap<String,Integer>(){{
             put("STR",-1);
             put("CON",-1);
@@ -193,21 +191,6 @@ public class PL{
         return player.getLevel();
     }
 
-    /**
-     * KPかどうかのセッター
-     * @param isKP
-     */
-    public void setIsKP(boolean isKP){
-        this.isKP = isKP;
-    }
-
-    /**
-     * KPかどうかのゲッター
-     * @return
-     */
-    public boolean getIsKP(){
-        return isKP;
-    }
 
     /**
      * 名前のゲッター

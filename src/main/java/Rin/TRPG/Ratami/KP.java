@@ -40,11 +40,13 @@ public class KP implements CommandExecutor{
 
         
         String target = sender.getName();
+        PL targetPlayer = plugin.getPl().get(target);
 
         boolean haveKP = false;
 
         for(String name: plugin.getPl().keySet()){
-            haveKP = plugin.getPl().get(name).getIsKP();
+            //haveKP = plugin.getPl().get(name).getIsKP();
+            haveKP = plugin.getPl().get(name).getPlayer().getScoreboardTags().contains("KP");
             if(haveKP)
                 break;
         }
@@ -57,14 +59,14 @@ public class KP implements CommandExecutor{
                     break;
                 }
                 player.getPlayer().setOp(false);
-                player.setIsKP(false); 
                 plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"give " + names +player.getGiveBook());
                 player.getPlayer().setGameMode(GameMode.ADVENTURE);
                 }
         }
         
-        plugin.getPl().get(target).setIsKP(true);
-        plugin.getPl().get(target).getPlayer().setOp(true);
+        //plugin.getPl().get(target).setIsKP(true);
+        targetPlayer.getPlayer().addScoreboardTag("KP");
+        targetPlayer.getPlayer().setOp(true);
 
         if(args.length == 0 || !args[0].equals("kpc")){
             plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(), "team join KP "+target);

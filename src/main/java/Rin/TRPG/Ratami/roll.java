@@ -23,7 +23,12 @@ public class roll implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        
+
+        if(!(sender instanceof Player)){
+            sender.sendMessage("サーバーからの実行は禁止です");
+            return true;
+        }
+
         TextComponent component = new TextComponent();
 
         /*引数に整数以外が与えられた場合の例外処理*/
@@ -32,16 +37,19 @@ public class roll implements CommandExecutor{
             int parseInt = Integer.parseInt(diceRoll[1]);
             
             int random = -1;
+
+            String skill = "";
+            String senderName = plugin.getPl().get(sender.getName()).getName();
+            SecureRandom seed = SecureRandom.getInstance("SHA1PRNG");
+
             //技能値を取得
             HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
 
             for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
-                SecureRandom seed = SecureRandom.getInstance("SHA1PRNG");
-                random = seed.nextInt(parseInt) + 1;
                 
-                String skill = "";
-                String senderName = plugin.getPl().get(sender.getName()).getName();
+                random = seed.nextInt(parseInt) + 1;
                 String result = senderName + " " + String.valueOf(random);
+                
                 
                 if(args.length >= 2){
 
@@ -89,7 +97,7 @@ public class roll implements CommandExecutor{
                         plugin.getLogger().info(result);
                         for(String name : plugin.getPl().keySet()){
                             PL p = plugin.getPl().get(name);
-                            if(p.getIsKP() && !sender.getName().equals(p.getPlayer().getName())){
+                            if(p.getPlayer().getScoreboardTags().contains("KP") && !sender.getName().equals(p.getPlayer().getName())){
                                 p.getPlayer().sendMessage("KPに通知");
                                 p.getPlayer().spigot().sendMessage(component);
                             }
