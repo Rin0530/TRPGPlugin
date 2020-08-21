@@ -108,11 +108,8 @@ public class roll implements CommandExecutor{
 
                 if(component.getText().equals(""))
                     component.setText(result);
-
-                for(Player player: plugin.getServer().getOnlinePlayers()){
-                    player.spigot().sendMessage(component);
-                    //player.sendMessage(result);
-                }
+                    
+                plugin.getServer().spigot().broadcast(component);
             }
         } catch (Exception e) {
             plugin.getLogger().info(e.toString()+"\nコマンドのオプションが間違っています");

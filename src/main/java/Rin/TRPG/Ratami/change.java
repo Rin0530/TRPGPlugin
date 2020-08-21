@@ -2,7 +2,6 @@ package Rin.TRPG.Ratami;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.*;
-import org.bukkit.entity.Player;
 
 public class change implements CommandExecutor{
     private Plugin plugin;
@@ -65,8 +64,8 @@ public class change implements CommandExecutor{
                 sender.sendMessage(e.toString());
                 return false;
             }
-        for(Player player :plugin.getServer().getOnlinePlayers())
-            player.sendMessage(plugin.getPl().get(args[0]).getName()+ " " +args[1]+ ":" +before+ "→" +after);
+
+        plugin.getServer().broadcastMessage(plugin.getPl().get(args[0]).getName()+ " " +args[1]+ ":" +before+ "→" +after);
         return true;
     }
 }
