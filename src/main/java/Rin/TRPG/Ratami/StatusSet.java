@@ -20,6 +20,7 @@ public class StatusSet implements CommandExecutor{
             
         PL senderPL = plugin.getPl().get(sender.getName());
 
+
         if(args[0].equals("main")){
             senderPL.setMainStatus(args[1], Integer.parseInt(args[2]));
             sender.sendMessage(args[1]+"を"+args[2]+"に設定しました");

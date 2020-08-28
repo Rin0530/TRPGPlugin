@@ -46,8 +46,10 @@ public class roll implements CommandExecutor{
             HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
 
             for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
-                
-                random = seed.nextInt(parseInt) + 1;
+                if(parseInt == 100)
+                    random = (int)(Math.random()*99) + 1;
+                else
+                    random = seed.nextInt(parseInt) + 1;
                 String result = senderName + " " + String.valueOf(random);
                 
                 

@@ -29,8 +29,24 @@ public class Status implements CommandExecutor{
 
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        
+        boolean isChanged = false;
         int num = -1;
+        for(String names :plugin.getPl().keySet()){
+            PL p = plugin.getPl().get(names);
+            p.getPlayer().setScoreboard(scoreboard);
+            
+            //plugin.getServer().getLogger().info(names);
+            if(team.getEntries().contains(names)){
+                int health = (int)p.getHP();
+                if(args.length == 0){
+                    isChanged = recreate(p.getName()+"'s HP "+String.valueOf(health));
+                    isChanged = recreate(p.getName()+"'s MP "+String.valueOf(p.getMP()));
+                    isChanged = recreate(p.getName()+"'s SAN "+String.valueOf(p.getSAN()));
+                }
+                if(!isChanged)
+                    break;
+            }
+        }
         /*
         オンラインのプレイヤー全員にスコアボードをセット
         */
@@ -41,10 +57,6 @@ public class Status implements CommandExecutor{
             //plugin.getServer().getLogger().info(names);
             if(team.getEntries().contains(names)){
                 int health = (int)p.getHP();
-
-                recreate(p.getName()+"'s HP "+String.valueOf(health));
-                recreate(p.getName()+"'s MP "+String.valueOf(p.getMP()));
-                recreate(p.getName()+"'s SAN "+String.valueOf(p.getSAN()));
 
                 objective.getScore(p.getName()+"'s HP "+String.valueOf(health)).setScore(num--);
                 objective.getScore(p.getName()+"'s MP "+String.valueOf(p.getMP())).setScore(num--);
@@ -58,11 +70,13 @@ public class Status implements CommandExecutor{
             }
         
         }
+
+
         //num = -1;
         return true;
     }
 
-    public void recreate(String score){
+    public boolean recreate(String score){
         if(!objective.getScore(score).isScoreSet()){
             objective.unregister();
             objective = scoreboard.getObjective("Status");
@@ -72,6 +86,7 @@ public class Status implements CommandExecutor{
                 objective =scoreboard.getObjective("Status");
             }
         }
+        return objective.getScore(score).isScoreSet();
     }
 
 }

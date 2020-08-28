@@ -5,9 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -127,6 +125,7 @@ public class Plugin extends JavaPlugin implements Listener{
     @EventHandler
     public void onInteract(PlayerDeathEvent e){
         HumanEntity entity = e.getEntity();
+        getServer().dispatchCommand(getServer().getConsoleSender(), "team join VIEWER "+entity.getName());
         entity.setGameMode(GameMode.SPECTATOR);
     }
 
