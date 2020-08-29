@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
+import org.bukkit.Location;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -126,6 +127,8 @@ public class Plugin extends JavaPlugin implements Listener{
     public void onInteract(PlayerDeathEvent e){
         HumanEntity entity = e.getEntity();
         getServer().dispatchCommand(getServer().getConsoleSender(), "team join VIEWER "+entity.getName());
+        Location location = entity.getLocation();
+        getServer().dispatchCommand(getServer().getConsoleSender(), "spawnpoint "+entity.getName()+" "+String.valueOf((int)location.getX())+" "+String.valueOf((int)location.getY())+" "+String.valueOf((int)location.getZ()));
         entity.setGameMode(GameMode.SPECTATOR);
     }
 
