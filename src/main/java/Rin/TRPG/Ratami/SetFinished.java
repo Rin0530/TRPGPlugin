@@ -19,7 +19,7 @@ public class SetFinished implements CommandExecutor{
         }
         PL senderPL = plugin.getPl().get(sender.getName());
         for(String value :senderPL.getMainStatus().keySet()){
-            if(senderPL.getMainStatus().get(value) == -1){
+            if(!senderPL.getObjective().getScore(value).isScoreSet()){
                 sender.sendMessage(value+"が設定されていません");
                 return true;
             }

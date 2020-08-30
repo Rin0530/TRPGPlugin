@@ -1,9 +1,12 @@
 package Rin.TRPG.Ratami;
 
 import java.security.SecureRandom;
-import java.util.HashMap;
+//import java.util.HashMap;
+import java.util.Set;
+
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.scoreboard.*;
 
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -11,6 +14,7 @@ import net.md_5.bungee.api.chat.TextComponent;
 public class roll implements CommandExecutor{
 
     private final Plugin plugin;
+    private Objective objective;
     
     public roll(Plugin plugin){
         this.plugin = plugin;
@@ -23,6 +27,8 @@ public class roll implements CommandExecutor{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
+        
+        objective = plugin.getPl().get(sender.getName()).getObjective();
 
         if(!(sender instanceof Player)){
             sender.sendMessage("サーバーからの実行は禁止です");
@@ -43,7 +49,8 @@ public class roll implements CommandExecutor{
             SecureRandom seed = SecureRandom.getInstance("SHA1PRNG");
 
             //技能値を取得
-            HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
+            //HashMap<String,Integer> senderStatus = plugin.getPl().get(sender.getName()).getOtherStatus();
+            Set<String> senderStatus = objective.getScoreboard().getEntries();
 
             for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
                 if(parseInt == 100)
@@ -61,16 +68,18 @@ public class roll implements CommandExecutor{
                         if(!(args.length == 2))
                             skill = args[2];
                     
-                    
+                    //sender.sendMessage(objective.getScore(skill).getEntry());
+
                     //コマンドの第3引数に技能のどれか含まれていれば
-                    if(senderStatus.containsKey(skill) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(skill) || skill.indexOf("SAN") >= 0) {
+                    //if(senderStatus.containsKey(skill) || plugin.getPl().get(sender.getName()).getsubStatus().containsKey(skill) || skill.indexOf("SAN") >= 0) {
+                    if(senderStatus.contains(objective.getScore(skill).getEntry()) || skill.indexOf("SAN") >= 0) {
                         
                         //依存能力値を取得
-                        if(plugin.getPl().get(sender.getName()).getsubStatus().containsKey(skill)){
+                        /*if(plugin.getPl().get(sender.getName()).getsubStatus().containsKey(skill)){
                             senderStatus = plugin.getPl().get(sender.getName()).getsubStatus();
-                        }
-                        result = senderName +" "+ skill+"("+senderStatus.get(skill)+")";
-                        if(senderStatus.get(skill) < random){
+                        }*/
+                        result = senderName +" "+ skill+"("+objective.getScore(skill).getScore()+")";
+                        if(objective.getScore(skill).getScore() < random){
                             result += " < "+ String.valueOf(random);
                             if(random >= 95){
                                 result += " 致命的";

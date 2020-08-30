@@ -40,7 +40,7 @@ public class Status implements CommandExecutor{
                 int health = (int)p.getHP();
                 if(args.length == 0){
                     isChanged = recreate(p.getName()+"'s HP "+String.valueOf(health));
-                    isChanged = recreate(p.getName()+"'s MP "+String.valueOf(p.getMP()));
+                    isChanged = recreate(p.getName()+"'s MP "+String.valueOf(p.getObjective().getScore("MP").getScore()));
                     isChanged = recreate(p.getName()+"'s SAN "+String.valueOf(p.getSAN()));
                 }
                 if(!isChanged)
@@ -59,7 +59,7 @@ public class Status implements CommandExecutor{
                 int health = (int)p.getHP();
 
                 objective.getScore(p.getName()+"'s HP "+String.valueOf(health)).setScore(num--);
-                objective.getScore(p.getName()+"'s MP "+String.valueOf(p.getMP())).setScore(num--);
+                objective.getScore(p.getName()+"'s MP "+String.valueOf(p.getObjective().getScore("MP").getScore())).setScore(num--);
                 objective.getScore(p.getName()+"'s SAN "+String.valueOf(p.getSAN())).setScore(num--);
 
                 // アクションバーにMPを表示

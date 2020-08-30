@@ -17,12 +17,10 @@ public class PL{
     //private Plugin plugin;
     private Player player;
     private HashMap<String,Integer> mainStatus;
-    private HashMap<String,Integer> subStatus;
-    private HashMap<String,Integer> otherStatus;
-    private HashMap<String,Integer> otherDef;
     private ArrayList<String> other;
     private ScoreboardManager manager;
-    private Scoreboard scoreboard1;
+    private Scoreboard scoreboard;
+    private Objective objective;
 
     private String[] mains = {
         "STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU"
@@ -35,6 +33,80 @@ public class PL{
     public PL(Player player,Plugin plugin){
        //this.plugin = plugin;
         this.player = player;
+
+        String name = player.getPlayerListName();
+        //スコアボード設定
+        manager = plugin.getServer().getScoreboardManager();
+        scoreboard = manager.getMainScoreboard();
+        objective = scoreboard.getObjective(name);
+        if(objective == null){
+            player.sendMessage("スコアボードを生成");
+            objective = scoreboard.registerNewObjective(name, "dummy", name);
+            objective =scoreboard.getObjective(name);
+            
+            objective.getScore("回避").setScore(0);
+            objective.getScore("キック").setScore(25);
+            objective.getScore("組み付き").setScore(25);
+            objective.getScore("こぶし（パンチ）").setScore(50);
+            objective.getScore("頭突き").setScore(10);
+            objective.getScore("投擲").setScore(25);
+            objective.getScore("マーシャルアーツ").setScore(1);
+            objective.getScore("拳銃").setScore(20);
+            objective.getScore("サブマシンガン").setScore(15);
+            objective.getScore("ショットガン").setScore(30);
+            objective.getScore("マシンガン").setScore(15);
+            objective.getScore("ライフル").setScore(25);
+            objective.getScore("応急手当").setScore(30);
+            objective.getScore("鍵開け").setScore(1);
+            objective.getScore("隠す").setScore(15);
+            objective.getScore("隠れる").setScore(10);
+            objective.getScore("聞き耳").setScore(25);
+            objective.getScore("忍び歩き").setScore(10);
+            objective.getScore("写真術").setScore(10);
+            objective.getScore("精神分析").setScore(1);
+            objective.getScore("追跡").setScore(10);
+            objective.getScore("登攀").setScore(40);
+            objective.getScore("図書館").setScore(25);
+            objective.getScore("目星").setScore(25);
+            objective.getScore("運転").setScore(20);
+            objective.getScore("機械修理").setScore(20);
+            objective.getScore("重機械操作").setScore(1);
+            objective.getScore("乗馬").setScore(5);
+            objective.getScore("水泳").setScore(25);
+            objective.getScore("製作").setScore(5);
+            objective.getScore("操縦").setScore(1);
+            objective.getScore("跳躍").setScore(25);
+            objective.getScore("電気修理").setScore(10);
+            objective.getScore("ナビゲート").setScore(10);
+            objective.getScore("変装").setScore(1);
+            objective.getScore("言いくるめ").setScore(5);
+            objective.getScore("信用").setScore(15);
+            objective.getScore("説得").setScore(15);
+            objective.getScore("値切り").setScore(5);
+            objective.getScore("母国語").setScore(0);
+            objective.getScore("医学").setScore(5);
+            objective.getScore("オカルト").setScore(5);
+            objective.getScore("化学").setScore(1);
+            objective.getScore("クトゥルフ神話").setScore(0);
+            objective.getScore("芸術").setScore(5);
+            objective.getScore("経理").setScore(10);
+            objective.getScore("考古学").setScore(1);
+            objective.getScore("コンピューター").setScore(1);
+            objective.getScore("心理学").setScore(5);
+            objective.getScore("人類学").setScore(1);
+            objective.getScore("生物学").setScore(1);
+            objective.getScore("地質学").setScore(1);
+            objective.getScore("電子工学").setScore(1);
+            objective.getScore("天文学").setScore(1);
+            objective.getScore("博物学").setScore(10);
+            objective.getScore("物理学").setScore(1);
+            objective.getScore("法律").setScore(5);
+            objective.getScore("薬学").setScore(1);
+            objective.getScore("歴史").setScore(20);
+
+        }
+        player.setScoreboard(scoreboard);
+        
         
         mainStatus = new HashMap<String,Integer>(){{
             put("STR",-1);
@@ -56,86 +128,7 @@ public class PL{
         };
 
         other = new ArrayList<>(Arrays.asList(skillList));
-        otherStatus = new HashMap<String,Integer>(){{
-            put("回避",0);
-            put("キック",25);
-            put("組み付き",25);
-            put("こぶし（パンチ）",50);
-            put("頭突き",10);
-            put("投擲",25);
-            put("マーシャルアーツ",1);
-            put("拳銃",20);
-            put("サブマシンガン",15);
-            put("ショットガン",30);
-            put("マシンガン",15);
-            put("ライフル",25);
-            put("応急手当",30);
-            put("鍵開け",1);
-            put("隠す",15);
-            put("隠れる",10);
-            put("聞き耳",25);
-            put("忍び歩き",10);
-            put("写真術",10);
-            put("精神分析",1);
-            put("追跡",10);
-            put("登攀",40);
-            put("図書館",25);
-            put("目星",25);
-            put("運転",20);
-            put("機械修理",20);
-            put("重機械操作",1);
-            put("乗馬",5);
-            put("水泳",25);
-            put("製作",5);
-            put("操縦",1);
-            put("跳躍",25);
-            put("電気修理",10);
-            put("ナビゲート",10);
-            put("変装",1);
-            put("言いくるめ",5);
-            put("信用",15);
-            put("説得",15);
-            put("値切り",5);
-            put("母国語",0);
-            put("医学",5);
-            put("オカルト",5);
-            put("化学",1);
-            put("クトゥルフ神話",0);
-            put("芸術",5);
-            put("経理",10);
-            put("考古学",1);
-            put("コンピューター",1);
-            put("心理学",5);
-            put("人類学",1);
-            put("生物学",1);
-            put("地質学",1);
-            put("電子工学",1);
-            put("天文学",1);
-            put("博物学",10);
-            put("物理学",1);
-            put("法律",5);
-            put("薬学",1);
-            put("歴史",20);
-        }};
-        subStatus = new HashMap<>();
 
-        //スコアボード設定
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"team add PL");
-        manager = plugin.getServer().getScoreboardManager();
-        scoreboard1 = manager.getNewScoreboard();
-        /*
-        team1 = scoreboard1.getTeam("PL");
-        if(team1 == null){
-            team1 = scoreboard1.registerNewTeam("PL");
-            team1.setDisplayName("PL");
-            team1.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.NEVER);
-            team1.setCanSeeFriendlyInvisibles(false);
-            team1 = scoreboard1.getTeam("PL");
-        }
-        team1 = scoreboard1.getTeam("PL");
-        */
-        player.setScoreboard(scoreboard1);
-        otherDef = new HashMap<>(otherStatus);
     }
 
 
@@ -155,7 +148,8 @@ public class PL{
      * @param MP
      */
     public void setMP(int MP){
-        this.MP = MP;
+        objective.getScore("MP").setScore(MP);
+        //this.MP = MP;
     }
 
     /**
@@ -163,7 +157,7 @@ public class PL{
      * @param SAN
      */
     public void setSAN(int SAN){
-        subStatus.put("SAN",SAN);
+        objective.getScore("SAN").setScore(SAN);
         player.setLevel(SAN);
     }
 
@@ -180,7 +174,7 @@ public class PL{
      * @return
      */
     public int getMP(){
-        return MP;
+        return objective.getScore("MP").getScore();
     }
 
     /**
@@ -215,31 +209,34 @@ public class PL{
      * @param num
      */
     public void setMainStatus(String statusName, int num){
-        mainStatus.put(statusName, num);
-        /*if(statusName.equals("HP"))
-            setHP(num);
-        else */
+        objective.getScore(statusName).setScore(num);
+
         if(statusName.equals("POW")){
             setSAN(num * 5);
             setMP(num);
-            subStatus.put("幸運", num * 5);
+
+            objective.getScore("SAN").setScore(num * 5);
+            objective.getScore("幸運").setScore(num * 5);
         }
         else if(statusName.equals("INT")){
-            subStatus.put("アイデア", num * 5);
+
+            objective.getScore("アイデア").setScore(num * 5);
         }
         else if(statusName.equals("EDU")){
-            subStatus.put("知識", num * 5);
-            otherStatus.put("母国語", num * 5);
-            otherDef.put("母国語", num * 5);
+
+
+            objective.getScore("知識").setScore(num * 5);
+            objective.getScore("母国語").setScore(num * 5);
         }
         else if(statusName.equals("DEX")){
-            otherStatus.put("回避", num * 2);
-            otherDef.put("回避", num * 2);
-            subStatus.put("器用", num * 5);
+
+
+            objective.getScore("回避").setScore(num * 2);
+            objective.getScore("器用").setScore(num * 5);
         }
         else if(statusName.equals("CON") || statusName.equals("SIZ")){
-            if(mainStatus.containsKey("CON") && mainStatus.containsKey("SIZ")){
-                double HP = (double)(mainStatus.get("CON")+mainStatus.get("SIZ")) /2.0;
+            if(objective.getScoreboard().getEntries().contains("CON") && objective.getScoreboard().getEntries().contains("SIZ")){
+                double HP = (double)(objective.getScore("CON").getScore()+objective.getScore("SIZ").getScore()) /2.0;
                 setHP(HP,true);
             }
         }
@@ -251,14 +248,10 @@ public class PL{
      * @param num
      */
     public void addOtherStatus(String statusName, int num){
-        if(num == 0){
-            otherStatus.put(statusName,otherDef.get(statusName));
-            getPlayer().sendMessage("リセット");
-        }else{
-            if(!otherStatus.containsKey(statusName))
-                other.add(statusName);
-            otherStatus.put(statusName,num);
-        }
+        if(!objective.getScoreboard().getEntries().contains(statusName))
+            other.add(statusName);
+        objective.getScore(statusName).setScore(num);
+        
     }
 
     /**
@@ -278,23 +271,6 @@ public class PL{
     }
 
     /**
-     * 依存能力値が格納されたハッシュマップを返す
-     * @return
-     */
-    public HashMap<String,Integer> getsubStatus(){
-        return subStatus;
-    }
-
-
-    /**
-     * 技能値が格納されたハッシュマップを返す
-     * @return
-     */
-    public HashMap<String,Integer> getOtherStatus(){
-        return otherStatus;
-    }
-
-    /**
      * PL用本の配布用コマンド
      * @return
      */
@@ -311,26 +287,36 @@ public class PL{
         return player;
     }
 
+    /**
+     * ステータスのスコアボードを返す
+     * @param sender
+     */
+    public Objective getObjective(){
+        return objective;
+    }
+
     public void giveBook(CommandSender sender){
 
         //能力値書き込み
         giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
         for(String str : getMain())
-            giveBook += ",{\"text\":\""+str+": "+String.valueOf(getMainStatus().get(str))+"\n\"}";
+            giveBook += ",{\"text\":\""+str+": "+String.valueOf(objective.getScore(str).getScore())+"\n\"}";
         giveBook += "]','[";
-        giveBook += "{\"text\":\"SAN: "+String.valueOf(getsubStatus().get("SAN"))+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 SAN\"}},";
+        giveBook += "{\"text\":\"SAN: "+String.valueOf(objective.getScore("SAN").getScore())+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 SAN\"}},";
+        
         for(String str : sub){
-            giveBook += "{\"text\":\""+str+": "+String.valueOf(getsubStatus().get(str))+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+str+"\"}}";
+            giveBook += "{\"text\":\""+str+": "+String.valueOf(objective.getScore(str).getScore())+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+str+"\"}}";
             if(!(str.equals("知識"))){
                 giveBook += ",";
             }
         }
+
         giveBook += "]','[";
         //技能値書き込み
         int line = 0;
         for(int i = 0;i < other.size(); i++){
             line++;
-            giveBook += "{\"text\":\""+other.get(i)+": "+String.valueOf(getOtherStatus().get(other.get(i)))+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+other.get(i)+"\"}}";
+            giveBook += "{\"text\":\""+other.get(i)+": "+String.valueOf(objective.getScore(other.get(i)).getScore())+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+other.get(i)+"\"}}";
             if(other.get(i).equals("ライフル") || other.get(i).equals("目星") || other.get(i).equals("変装") || other.get(i).equals("母国語") || other.get(i).equals("コンピューター") || line == 12){
                 giveBook += "]','[";
                 line = 0;
