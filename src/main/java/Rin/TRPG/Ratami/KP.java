@@ -55,11 +55,10 @@ public class KP implements CommandExecutor{
             for(String names :player.getEntries()){
                 PL player = plugin.getPl().get(names);
                 if(player == null){
-                    sender.sendMessage(names);
+                    //sender.sendMessage(names);
                     continue;
                 }
                 player.getPlayer().setOp(false);
-                plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"give " + names +player.getGiveBook());
                 player.getPlayer().setGameMode(GameMode.ADVENTURE);
                 }
         }

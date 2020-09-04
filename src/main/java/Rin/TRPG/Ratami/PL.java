@@ -13,8 +13,7 @@ import org.bukkit.scoreboard.*;
 public class PL{
     private String name;
     private String giveBook;
-    private int MP;
-    //private Plugin plugin;
+    private Plugin plugin;
     private Player player;
     private HashMap<String,Integer> mainStatus;
     private ArrayList<String> other;
@@ -31,8 +30,9 @@ public class PL{
         };
 
     public PL(Player player,Plugin plugin){
-       //this.plugin = plugin;
+        this.plugin = plugin;
         this.player = player;
+        name = player.getName();
 
         String name = player.getPlayerListName();
         //スコアボード設定
@@ -325,5 +325,6 @@ public class PL{
                 giveBook += ",";
         }
         giveBook += "]']}";
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"give " + name + giveBook);
     }
 }
