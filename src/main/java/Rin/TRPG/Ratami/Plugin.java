@@ -6,6 +6,8 @@ import java.util.HashMap;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -83,7 +85,6 @@ public class Plugin extends JavaPlugin implements Listener{
         getCommand("removeBook").setExecutor(new SetFinished(this));
         getCommand("enablepvp").setExecutor(new EnablePVP(this));
         getCommand("displayname").setExecutor(new Name(this));
-        getCommand("reflect").setExecutor(new Status(this));
         getServer().getPluginManager().registerEvents(this,this);
         getLogger().info("Hello, TRPG!");
 
@@ -130,6 +131,14 @@ public class Plugin extends JavaPlugin implements Listener{
         Location location = entity.getLocation();
         getServer().dispatchCommand(getServer().getConsoleSender(), "spawnpoint "+entity.getName()+" "+String.valueOf((int)location.getX())+" "+String.valueOf((int)location.getY())+" "+String.valueOf((int)location.getZ()));
         entity.setGameMode(GameMode.SPECTATOR);
+    }
+
+    @Override
+    public boolean onCommand(CommandSender sender,Command command, String label,
+    String[] args){
+        if(command.getName().equals("reflect"))
+            new Status(this).runTaskTimer(this, 0, 10);
+        return true;
     }
 
     /**

@@ -1,12 +1,12 @@
 package Rin.TRPG.Ratami;
 
-import org.bukkit.command.*;
+import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
 import net.md_5.bungee.api.ChatMessageType;
 import net.md_5.bungee.api.chat.TextComponent;
 
-public class Status implements CommandExecutor{
+public class Status extends BukkitRunnable{
     private Plugin plugin;
     private ScoreboardManager manager;
     private Scoreboard scoreboard;
@@ -27,8 +27,7 @@ public class Status implements CommandExecutor{
         
     }
 
-    public boolean onCommand(CommandSender sender,Command command, String label,
-    String[] args){
+    public void run(){
         boolean isChanged = false;
         int num = -1;
         for(String names :plugin.getPl().keySet()){
@@ -38,11 +37,9 @@ public class Status implements CommandExecutor{
             //plugin.getServer().getLogger().info(names);
             if(team.getEntries().contains(names)){
                 int health = (int)p.getHP();
-                if(args.length == 0){
-                    isChanged = recreate(p.getName()+"'s HP "+String.valueOf(health));
-                    isChanged = recreate(p.getName()+"'s MP "+String.valueOf(p.getObjective().getScore("MP").getScore()));
-                    isChanged = recreate(p.getName()+"'s SAN "+String.valueOf(p.getSAN()));
-                }
+                isChanged = recreate(p.getName()+"'s HP "+String.valueOf(health));
+                isChanged = recreate(p.getName()+"'s MP "+String.valueOf(p.getObjective().getScore("MP").getScore()));
+                isChanged = recreate(p.getName()+"'s SAN "+String.valueOf(p.getSAN()));
                 if(!isChanged)
                     break;
             }
@@ -68,12 +65,7 @@ public class Status implements CommandExecutor{
                 component.setText(displayMP);
                 p.getPlayer().spigot().sendMessage(ChatMessageType.ACTION_BAR, component);
             }
-        
         }
-
-
-        //num = -1;
-        return true;
     }
 
     public boolean recreate(String score){
