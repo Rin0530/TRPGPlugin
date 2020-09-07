@@ -210,6 +210,12 @@ public class PL{
      */
     public void setMainStatus(String statusName, int num){
         objective.getScore(statusName).setScore(num);
+        objective.getScore(statusName+"*5").setScore(num*5);
+        objective.getScore(statusName+"*4").setScore(num*4);
+        objective.getScore(statusName+"*3").setScore(num*3);
+        objective.getScore(statusName+"*2").setScore(num*2);
+        objective.getScore(statusName+"*1").setScore(num*1);
+
 
         if(statusName.equals("POW")){
             setSAN(num * 5);
@@ -300,7 +306,7 @@ public class PL{
         //能力値書き込み
         giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
         for(String str : getMain())
-            giveBook += ",{\"text\":\""+str+": "+String.valueOf(objective.getScore(str).getScore())+"\n\"}";
+            giveBook += ",{\"text\":\""+str+": "+String.valueOf(objective.getScore(str).getScore())+"\n\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\""+str+"\"}]},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/statusroll "+str+"\"}}";
         giveBook += "]','[";
         giveBook += "{\"text\":\"SAN: "+String.valueOf(objective.getScore("SAN").getScore())+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 SAN\"}},";
         
@@ -316,7 +322,7 @@ public class PL{
         int line = 0;
         for(int i = 0;i < other.size(); i++){
             line++;
-            giveBook += "{\"text\":\""+other.get(i)+": "+String.valueOf(objective.getScore(other.get(i)).getScore())+"\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+other.get(i)+"\"}}";
+            giveBook += "{\"text\":\""+other.get(i)+": "+String.valueOf(objective.getScore(other.get(i)).getScore())+"\n\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\""+other.get(i)+"\"}]},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 "+other.get(i)+"\"}}";
             if(other.get(i).equals("ライフル") || other.get(i).equals("目星") || other.get(i).equals("変装") || other.get(i).equals("母国語") || other.get(i).equals("コンピューター") || line == 12){
                 giveBook += "]','[";
                 line = 0;

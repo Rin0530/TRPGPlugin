@@ -10,6 +10,11 @@ commands:
     usage: /<command> 1D100 (secret) 技能名
     default: true
 
+  statusroll:
+    description: 能力値を使ったダイスロールの倍率設定
+    usage: /<command> 能力
+    default: true
+
   book:
     description: ステータス設定用本配布コマンド.直接実行することはない
     default: true

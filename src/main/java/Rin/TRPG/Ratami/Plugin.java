@@ -6,12 +6,14 @@ import java.util.HashMap;
 import org.bukkit.GameMode;
 import org.bukkit.GameRule;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.plugin.java.JavaPlugin ;
 import org.bukkit.scoreboard.Scoreboard;
@@ -42,8 +44,8 @@ public class Plugin extends JavaPlugin implements Listener{
         // Team設定
         manager = getServer().getScoreboardManager();
         board_pl = manager.getMainScoreboard();
-        board_kp = manager.getNewScoreboard();
-        board_viewer = manager.getNewScoreboard();
+        board_kp = manager.getMainScoreboard();
+        board_viewer = manager.getMainScoreboard();
 
         PL = board_pl.getTeam("PL");
         if(PL == null){
@@ -77,6 +79,7 @@ public class Plugin extends JavaPlugin implements Listener{
 
         /* コマンド有効化*/  
         getCommand("roll").setExecutor(new roll(this));
+        getCommand("statusroll").setExecutor(new StatusRoll(this));
         getCommand("book").setExecutor(new StatusBook(this));
         getCommand("statusSet").setExecutor(new StatusSet(this));
         getCommand("kp").setExecutor(new KP(this));
@@ -131,6 +134,16 @@ public class Plugin extends JavaPlugin implements Listener{
         Location location = entity.getLocation();
         getServer().dispatchCommand(getServer().getConsoleSender(), "spawnpoint "+entity.getName()+" "+String.valueOf((int)location.getX())+" "+String.valueOf((int)location.getY())+" "+String.valueOf((int)location.getZ()));
         entity.setGameMode(GameMode.SPECTATOR);
+    }
+
+    @EventHandler
+    public void onInteract(InventoryClickEvent e){
+        if(e.getClickedInventory().getSize() != 9)
+            return;
+
+        getServer().dispatchCommand(e.getWhoClicked(), "roll 1D100 "+ e.getCurrentItem().getItemMeta().getLore().get(0));
+        e.setCancelled(true);
+        e.getWhoClicked().closeInventory();
     }
 
     @Override
