@@ -28,12 +28,12 @@ public class roll implements CommandExecutor{
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
         
+        if(!(sender instanceof Player)){
+            return serverRoll(args);
+        }
+
         objective = plugin.getPl().get(sender.getName()).getObjective();
 
-        if(!(sender instanceof Player)){
-            sender.sendMessage("サーバーからの実行は禁止です");
-            return true;
-        }
 
         TextComponent component = new TextComponent();
 
@@ -128,6 +128,58 @@ public class roll implements CommandExecutor{
         }
         return true;
         
+    }
+
+    private boolean serverRoll(String[] args){
+        /*引数に整数以外が与えられた場合の例外処理*/
+        try {
+            String[] diceRoll = args[0].split("D");
+            int parseInt = Integer.parseInt(diceRoll[1]);
+            
+            int random = -1;
+
+            SecureRandom seed = SecureRandom.getInstance("SHA1PRNG");
+
+            TextComponent component = new TextComponent();
+
+            for(int i = 0;i < Integer.parseInt(diceRoll[0]);i++){
+                if(parseInt == 100)
+                    random = (int)(Math.random()*99) + 1;
+                else
+                    random = seed.nextInt(parseInt) + 1;
+                
+                String result = String.valueOf(random);
+                
+                component.setText(result);
+
+                if(args.length >= 2){
+                    
+                    
+                    /*オプションでsecretが指定されれば自分とKPにのみ通知 */
+                    if(args[1].equals("secret")){
+                        //sender.sendMessage(result);
+                        plugin.getLogger().info(result);
+                        for(String name : plugin.getPl().keySet()){
+                            PL p = plugin.getPl().get(name);
+                            if(p.getPlayer().getScoreboardTags().contains("KP")){
+                                p.getPlayer().sendMessage("KPに通知");
+                                p.getPlayer().spigot().sendMessage(component);
+                            }
+                        }
+                        continue;
+                    }
+                    return true;
+                }
+                
+                if(component.getText().equals(""))
+                    component.setText(result);
+                plugin.getServer().spigot().broadcast(component);
+            }
+        } catch(Exception e){
+            plugin.getLogger().info(e.toString()+"\nコマンドのオプションが間違っています");
+            return false;
+        }
+        return true;
     }
 
 }
