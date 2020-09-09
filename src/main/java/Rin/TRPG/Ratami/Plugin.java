@@ -27,6 +27,7 @@ import org.bukkit.scoreboard.Team.OptionStatus;
  *
  */
 public class Plugin extends JavaPlugin implements Listener{
+    private boolean isReflecting;
     private HashMap<String,PL> pl;
     private Scoreboard board_pl;
     private Scoreboard board_kp;
@@ -101,12 +102,11 @@ public class Plugin extends JavaPlugin implements Listener{
         getServer().getWorld("world").setGameRule(GameRule.FALL_DAMAGE, false);
         getServer().getWorld("world").setGameRule(GameRule.FIRE_DAMAGE, false);
         getServer().getWorld("world").setPVP(false);
-  
-        
 
         pl = new HashMap<>();
+        isReflecting = false;
     }
-    
+
 
     @Override
     public void onDisable() {
@@ -148,8 +148,13 @@ public class Plugin extends JavaPlugin implements Listener{
     @Override
     public boolean onCommand(CommandSender sender,Command command, String label,
     String[] args){
-        if(command.getName().equals("reflect"))
+        if(command.getName().equals("reflect")){
+            if(!isReflecting){
             new Status(this).runTaskTimer(this, 0, 10);
+            isReflecting = true;
+            }else
+                sender.sendMessage("このコマンドはすでに実行中です");
+        }
         return true;
     }
 
