@@ -3,25 +3,27 @@ api: 1.16.1
 version: ${project.version}
 main: Rin.TRPG.Ratami.Plugin
 api-version: "1.16"
+website: https://github.com/Rin0530/TRPGPlugin
 
 commands:
   roll:
     description: 引数で振るダイスを指定.2つ目の引数にsecretを入れると自分とKPにのみ結果を通知
     usage: /<command> 1D100 (secret) 技能名
-    default: true
+    permission: trpg.pc
 
   statusroll:
     description: 能力値を使ったダイスロールの倍率設定
     usage: /<command> 能力
-    default: true
+    permission: trpg.pc
 
   book:
-    description: ステータス設定用本配布コマンド.直接実行することはない
-    default: true
-    
+    description: ステータス設定用本配布コマンド.本にない技能を登録するときに仕様
+    usage: /<command> any 技能名
+    permission: trpg.pc
+
   statusSet:
     description: ステータス設定用コマンド.直接実行することはない
-    default: true
+    permission: trpg.pc
 
   kp:
     description: コマンド実行者をKPに設定
@@ -36,24 +38,33 @@ commands:
   change:
     description: オプションのプレイヤーのHP,MP,SANを増やす
     usage: /<command> 対象プレイヤー 対象ステータス 変更値
-    default: op
+    default: trpg.kp
 
   removeBook:
     description: ステータス振り完了
+    permission: trpg.pc
     usage: /<command>
-    default: true
 
   displayname:
     description: 表示名変更
+    permission: trpg.kp
     usage: /<command> プレイヤー名 表示名
-    default: true
 
   enablepvp:
     description: PvPの可否を設定
-    usage: /<command> enable|disable
-    default: op
+    permission: trpg.kp
+    usage: /<command> true | false
 
   reflect:
     description: 探索者のステータスをスコアボードとアクションバーに反映
+    permission: trpg.kp
     usage: <command>
+
+permissions:
+  trpg.kp:
+    description: Gives access to all TRPG commands
+    default: op
+
+  trpg.pc:
+    description: Gives access to TRPG commands for PC
     default: true

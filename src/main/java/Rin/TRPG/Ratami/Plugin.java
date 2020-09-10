@@ -137,7 +137,7 @@ public class Plugin extends JavaPlugin implements Listener{
 
     @EventHandler
     public void onInteract(InventoryClickEvent e){
-        if(e.getClickedInventory().getSize() != 9)
+        if(e.getClickedInventory() == null || e.getClickedInventory().getSize() != 9)
             return;
 
         getServer().dispatchCommand(e.getWhoClicked(), "roll 1D100 "+ e.getCurrentItem().getItemMeta().getLore().get(0));
