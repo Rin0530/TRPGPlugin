@@ -331,6 +331,6 @@ public class PL{
                 giveBook += ",";
         }
         giveBook += "]']}";
-        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"give " + name + giveBook);
+        plugin.getServer().dispatchCommand(plugin.getServer().getConsoleSender(),"give " + getPlayer().getName() + giveBook);
     }
 }
