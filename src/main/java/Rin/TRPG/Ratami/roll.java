@@ -103,7 +103,6 @@ public class roll implements CommandExecutor{
                     
                     /*オプションでsecretが指定されれば自分とKPにのみ通知 */
                     if(args[1].equals("secret")){
-                        sender.spigot().sendMessage(component);
                         //sender.sendMessage(result);
                         plugin.getLogger().info(result);
                         for(String name : plugin.getPl().keySet()){
@@ -153,8 +152,7 @@ public class roll implements CommandExecutor{
                 component.setText(result);
 
                 if(args.length >= 2){
-                    
-                    
+
                     /*オプションでsecretが指定されれば自分とKPにのみ通知 */
                     if(args[1].equals("secret")){
                         //sender.sendMessage(result);
