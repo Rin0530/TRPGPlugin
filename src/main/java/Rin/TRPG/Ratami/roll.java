@@ -107,7 +107,7 @@ public class roll implements CommandExecutor{
                         plugin.getLogger().info(result);
                         for(String name : plugin.getPl().keySet()){
                             PL p = plugin.getPl().get(name);
-                            if(p.getPlayer().getScoreboardTags().contains("KP") && !sender.getName().equals(p.getPlayer().getName())){
+                            if(p.getPlayer().getScoreboardTags().contains("KP")){
                                 p.getPlayer().sendMessage("KPに通知");
                                 p.getPlayer().spigot().sendMessage(component);
                             }
