@@ -15,7 +15,7 @@ public class change implements CommandExecutor{
     String[] args){
         if(args.length != 3)
             return false;
-        int change = Integer.parseInt(args[2]);
+        int change = Integer.parseInt(args[2]) * 2;
         PL pl = plugin.getPl().get(args[0]);
         int before = 0;
         int after = 0;
@@ -65,7 +65,7 @@ public class change implements CommandExecutor{
                 return false;
             }
 
-        plugin.getServer().broadcastMessage(plugin.getPl().get(args[0]).getName()+ " " +args[1]+ ":" +before+ "→" +after);
+        plugin.getServer().broadcastMessage(plugin.getPl().get(args[0]).getName()+ " " +args[1]+ ":" +before/2+ "→" +after/2);
         return true;
     }
 }

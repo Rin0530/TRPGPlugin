@@ -136,12 +136,15 @@ public class PL{
     /**
      * HPのセッター
      * @param HP
+     * @param init 初期設定かどうか
      */
     public void setHP(double HP,boolean init){
         //HP1につき最大ハート1つになる
-        if(init)
-            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Math.round(HP));
-        player.setHealth(Math.round(HP));
+        if(init){
+            player.getAttribute(Attribute.GENERIC_MAX_HEALTH).setBaseValue(Math.floor(HP) * 2);
+            player.setHealth(Math.floor(HP) * 2);
+        }else
+            player.setHealth(Math.round(HP));
     }
     /**
      * MPのセッター
@@ -242,7 +245,10 @@ public class PL{
         }
         else if(statusName.equals("CON") || statusName.equals("SIZ")){
             if(objective.getScoreboard().getEntries().contains("CON") && objective.getScoreboard().getEntries().contains("SIZ")){
-                double HP = (double)(objective.getScore("CON").getScore()+objective.getScore("SIZ").getScore()) /2.0;
+                double HP = ( objective.getScore("CON").getScore()+objective.getScore("SIZ").getScore() ) /2.0;
+                if(HP % 2 != 0)
+                    HP += 0.5;
+                player.sendMessage(String.valueOf(HP));
                 setHP(HP,true);
             }
         }

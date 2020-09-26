@@ -36,7 +36,7 @@ public class Status extends BukkitRunnable{
             
             //plugin.getServer().getLogger().info(names);
             if(team.getEntries().contains(names)){
-                int health = (int)p.getHP();
+                int health = (int)p.getHP()/2;
                 isChanged = recreate(p.getName()+"'s HP "+String.valueOf(health));
                 isChanged = recreate(p.getName()+"'s MP "+String.valueOf(p.getObjective().getScore("MP").getScore()));
                 isChanged = recreate(p.getName()+"'s SAN "+String.valueOf(p.getSAN()));
@@ -53,7 +53,7 @@ public class Status extends BukkitRunnable{
             
             //plugin.getServer().getLogger().info(names);
             if(team.getEntries().contains(names)){
-                int health = (int)p.getHP();
+                int health = (int)p.getHP()/2;
 
                 objective.getScore(p.getName()+"'s HP "+String.valueOf(health)).setScore(num--);
                 objective.getScore(p.getName()+"'s MP "+String.valueOf(p.getObjective().getScore("MP").getScore())).setScore(num--);
