@@ -15,13 +15,14 @@ public class change implements CommandExecutor{
     String[] args){
         if(args.length != 3)
             return false;
-        int change = Integer.parseInt(args[2]) * 2;
+        int change = Integer.parseInt(args[2]);
         PL pl = plugin.getPl().get(args[0]);
         int before = 0;
         int after = 0;
             try {
                 switch(args[1]){
                     case "HP":
+                        change *= 2;
                         before = (int)pl.getHP();
                         change += before;
                         if(change <= 0){
@@ -34,6 +35,8 @@ public class change implements CommandExecutor{
                         }
                         pl.setHP((double)change, false);
                         after = (int)pl.getHP();
+                        before /= 2;
+                        after /= 2;
                         break;
                     case "MP":
                         before = pl.getMP();
@@ -65,7 +68,7 @@ public class change implements CommandExecutor{
                 return false;
             }
 
-        plugin.getServer().broadcastMessage(plugin.getPl().get(args[0]).getName()+ " " +args[1]+ ":" +before/2+ "→" +after/2);
+        plugin.getServer().broadcastMessage(plugin.getPl().get(args[0]).getName()+ " " +args[1]+ ":" +before+ "→" +after);
         return true;
     }
 }

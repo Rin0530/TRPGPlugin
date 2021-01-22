@@ -1,5 +1,6 @@
 package Rin.TRPG.Ratami;
 
+import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.scoreboard.*;
 
@@ -47,7 +48,8 @@ public class Status extends BukkitRunnable{
         /*
         オンラインのプレイヤー全員にスコアボードをセット
         */
-        for(String names :plugin.getPl().keySet()){
+        for(Player player :plugin.getServer().getOnlinePlayers()){
+            String names = player.getName();
             PL p = plugin.getPl().get(names);
             p.getPlayer().setScoreboard(scoreboard);
             
