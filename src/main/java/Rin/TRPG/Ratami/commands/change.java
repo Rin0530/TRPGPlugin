@@ -1,7 +1,10 @@
-package Rin.TRPG.Ratami;
+package Rin.TRPG.Ratami.commands;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.*;
+
+import Rin.TRPG.Ratami.PL;
+import Rin.TRPG.Ratami.Plugin;
 
 public class change implements CommandExecutor{
     private Plugin plugin;

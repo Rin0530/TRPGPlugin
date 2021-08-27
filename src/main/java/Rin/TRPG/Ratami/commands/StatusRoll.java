@@ -1,4 +1,4 @@
-package Rin.TRPG.Ratami;
+package Rin.TRPG.Ratami.commands;
 
 
 import java.util.Arrays;
@@ -9,6 +9,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import Rin.TRPG.Ratami.Plugin;
 
 public class StatusRoll implements CommandExecutor{
     private Plugin plugin;

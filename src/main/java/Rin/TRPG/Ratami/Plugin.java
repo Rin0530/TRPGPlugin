@@ -21,6 +21,17 @@ import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
 
+import Rin.TRPG.Ratami.commands.EnablePVP;
+import Rin.TRPG.Ratami.commands.GiveBook;
+import Rin.TRPG.Ratami.commands.KP;
+import Rin.TRPG.Ratami.commands.Name;
+import Rin.TRPG.Ratami.commands.SetFinished;
+import Rin.TRPG.Ratami.commands.StatusBook;
+import Rin.TRPG.Ratami.commands.StatusRoll;
+import Rin.TRPG.Ratami.commands.StatusSet;
+import Rin.TRPG.Ratami.commands.change;
+import Rin.TRPG.Ratami.commands.roll;
+
 
 /**
  * Hello world!
@@ -92,16 +103,18 @@ public class Plugin extends JavaPlugin implements Listener{
         getLogger().info("Hello, TRPG!");
 
         //ゲームルール設定
-        getServer().getWorld("world").setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
-        getServer().getWorld("world").setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, false);
-        getServer().getWorld("world").setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
-        getServer().getWorld("world").setGameRule(GameRule.DO_WEATHER_CYCLE, false);
-        getServer().getWorld("world").setGameRule(GameRule.NATURAL_REGENERATION, false);
-        getServer().getWorld("world").setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false);
-        getServer().getWorld("world").setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
-        getServer().getWorld("world").setGameRule(GameRule.FALL_DAMAGE, false);
-        getServer().getWorld("world").setGameRule(GameRule.FIRE_DAMAGE, false);
-        getServer().getWorld("world").setPVP(false);
+        getServer().getWorlds().forEach(world -> {
+        world.setGameRule(GameRule.ANNOUNCE_ADVANCEMENTS, false);
+        world.setGameRule(GameRule.COMMAND_BLOCK_OUTPUT, false);
+        world.setGameRule(GameRule.DO_DAYLIGHT_CYCLE, false);
+        world.setGameRule(GameRule.DO_WEATHER_CYCLE, false);
+        world.setGameRule(GameRule.NATURAL_REGENERATION, false);
+        world.setGameRule(GameRule.SEND_COMMAND_FEEDBACK, false);
+        world.setGameRule(GameRule.DO_IMMEDIATE_RESPAWN, true);
+        world.setGameRule(GameRule.FALL_DAMAGE, false);
+        world.setGameRule(GameRule.FIRE_DAMAGE, false);
+        world.setPVP(false);
+        });
 
         pl = new HashMap<>();
         isReflecting = false;
