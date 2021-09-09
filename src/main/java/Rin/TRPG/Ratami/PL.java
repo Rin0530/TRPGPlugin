@@ -2,7 +2,8 @@ package Rin.TRPG.Ratami;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashMap;
+import java.util.List;
+import java.util.TreeMap;
 
 import org.bukkit.attribute.Attribute;
 import org.bukkit.command.CommandSender;
@@ -15,15 +16,13 @@ public class PL{
     private String giveBook;
     private Plugin plugin;
     private Player player;
-    private HashMap<String,Integer> mainStatus;
+    private TreeMap<String,Integer> mainStatus;
     private ArrayList<String> other;
     private ScoreboardManager manager;
     private Scoreboard scoreboard;
     private Objective objective;
 
-    private String[] mains = {
-        "STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU"
-        };
+    private List<String> mains = Arrays.asList("STR", "CON", "POW", "DEX", "APP", "SIZ", "INT", "EDU");
 
     private String[] sub = {
         "幸運", "アイデア", "器用", "知識"
@@ -108,16 +107,15 @@ public class PL{
         player.setScoreboard(scoreboard);
         
         
-        mainStatus = new HashMap<String,Integer>(){{
-            put("STR",-1);
-            put("CON",-1);
-            put("POW",-1);
-            put("DEX",-1);
-            put("APP",-1);
-            put("SIZ",-1);
-            put("INT",-1);
-            put("EDU",-1);
-        }};
+        mainStatus = new TreeMap<String,Integer>();
+        mainStatus.put("STR",-1);
+        mainStatus.put("CON",-1);
+        mainStatus.put("POW",-1);
+        mainStatus.put("DEX",-1);
+        mainStatus.put("APP",-1);
+        mainStatus.put("SIZ",-1);
+        mainStatus.put("INT",-1);
+        mainStatus.put("EDU",-1);
 
         String[] skillList = {
             "回避", "キック", "組み付き", "こぶし（パンチ）", "頭突き", "投擲", "マーシャルアーツ", "拳銃", "サブマシンガン", "ショットガン", "マシンガン", "ライフル",
@@ -266,20 +264,17 @@ public class PL{
         
     }
 
-    /**
-     * 能力一覧を返す
-     * @return
-     */
-    public String[] getMain(){
-        return mains;
-    }
 
     /**
      * 能力値が格納されたハッシュマップを返す
      * @return
      */
-    public HashMap<String,Integer> getMainStatus(){
-        return mainStatus;
+    public List<String> getMainStatus(){
+        return mains;
+    }
+
+    public List<String> getOtherStatus(){
+        return other;
     }
 
     /**
@@ -311,7 +306,7 @@ public class PL{
 
         //能力値書き込み
         giveBook = " minecraft:written_book{display:{Name:'{\"text\":\"ステータス一覧\"}'},title:\"\",author:\"\",pages:['[{\"text\":\"ステータスの一覧です\n1D100でダイスを振り\n成否を表示します\n\"}";
-        for(String str : getMain())
+        for(String str : getMainStatus())
             giveBook += ",{\"text\":\""+str+": "+String.valueOf(objective.getScore(str).getScore())+"\n\",\"hoverEvent\":{\"action\":\"show_text\",\"value\":[{\"text\":\""+str+"\"}]},\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/statusroll "+str+"\"}}";
         giveBook += "]','[";
         giveBook += "{\"text\":\"SAN: "+String.valueOf(objective.getScore("SAN").getScore())+"\n\n\",\"clickEvent\":{\"action\":\"run_command\",\"value\":\"/roll 1D100 SAN\"}},";
