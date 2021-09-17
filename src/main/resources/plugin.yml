@@ -8,7 +8,7 @@ website: https://github.com/Rin0530/TRPGPlugin
 commands:
   roll:
     description: 引数で振るダイスを指定.2つ目の引数にsecretを入れると自分とKPにのみ結果を通知
-    usage: /<command> 1D100 (secret) 技能名
+    usage: /<command> nDm (secret) 技能名
     permission: trpg.pc
 
   statusroll:

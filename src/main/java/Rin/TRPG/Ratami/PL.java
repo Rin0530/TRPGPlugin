@@ -201,6 +201,8 @@ public class PL{
      */
     public void setName(String name){
         getPlayer().setDisplayName(name);
+        getPlayer().setCustomName(name);
+        getPlayer().setPlayerListName(name);
         this.name = name;
     }
 

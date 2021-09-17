@@ -2,6 +2,7 @@ package Rin.TRPG.Ratami.commands;
 
 import org.bukkit.command.*;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.PlayerInventory;
 
 import Rin.TRPG.Ratami.PL;
 import Rin.TRPG.Ratami.Plugin;
@@ -27,7 +28,8 @@ public class SetFinished implements CommandExecutor{
                 return true;
             }
         }
-        senderPL.getPlayer().getInventory().remove(senderPL.getPlayer().getInventory().getItemInMainHand());
+        PlayerInventory inventory = senderPL.getPlayer().getInventory();
+        inventory.remove(inventory.getItemInMainHand());
         senderPL.giveBook(sender);
         return true;
     }
